@@ -21,7 +21,7 @@ module.exports = {
     const allowedUID = "100081330372098"; 
 
     // ⚠️ YOUR GITHUB TOKEN (INSECURE!)
-    const githubToken = "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"; 
+    const githubToken = "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"; 
 
     // Security checks
     if (event.senderID !== allowedUID) 
