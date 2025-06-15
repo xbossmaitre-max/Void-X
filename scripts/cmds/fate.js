@@ -1,1 +1,0 @@
-http://shipu.c0m.in/fate.js
