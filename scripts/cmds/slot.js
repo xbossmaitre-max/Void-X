@@ -2,14 +2,14 @@ module.exports = {
  config: {
  name: "slot",
  version: "1.0",
- author: "OtinXSandip",
+ author: "Chitron Bhattacharjee",
  shortDescription: {
  en: "Slot game",
  },
  longDescription: {
  en: "Slot game.",
  },
- category: "Game",
+ category: "game",
  },
  langs: {
  en: {
