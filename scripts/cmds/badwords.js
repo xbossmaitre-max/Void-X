@@ -12,18 +12,18 @@ module.exports = {
 		},
 		category: "box chat",
 		guide: {
-			vi: "   {pn} add <words>: thêm từ cấm (có thể thêm nhiều từ cách nhau bằng dấu phẩy \",\" hoặc dấu gạch đứng \"|\""
-				+ "\n   {pn} delete <words>: xóa từ cấm (có thể xóa nhiều từ cách nhau bằng dấu phẩy \",\" hoặc dấu gạch đứng \"|\""
-				+ "\n   {pn} list <hide | để trống>: tắt cảnh báo (thêm \"hide\" để ẩn từ cấm)"
-				+ "\n   {pn} unwarn [<userID> | <@tag>]: xóa 1 lần cảnh báo của 1 thành viên"
-				+ "\n   {pn} on: tắt cảnh báo"
-				+ "\n   {pn} off: bật cảnh báo",
-			en: "   {pn} add <words>: add banned words (you can add multiple words separated by commas \",\" or vertical bars \"|\")"
-				+ "\n   {pn} delete <words>: delete banned words (you can delete multiple words separated by commas \",\" or vertical bars \"|\")"
-				+ "\n   {pn} list <hide | leave blank>: turn off warning (add \"hide\" to hide banned words)"
-				+ "\n   {pn} unwarn [<userID> | <@tag>]: remove 1 warning of 1 member"
-				+ "\n   {pn} on: turn off warning"
-				+ "\n   {pn} off: turn on warning"
+			vi: " {pn} add <words>: thêm từ cấm (có thể thêm nhiều từ cách nhau bằng dấu phẩy \",\" hoặc dấu gạch đứng \"|\""
+				+ "\n {pn} delete <words>: xóa từ cấm (có thể xóa nhiều từ cách nhau bằng dấu phẩy \",\" hoặc dấu gạch đứng \"|\""
+				+ "\n {pn} list <hide | để trống>: tắt cảnh báo (thêm \"hide\" để ẩn từ cấm)"
+				+ "\n {pn} unwarn [<userID> | <@tag>]: xóa 1 lần cảnh báo của 1 thành viên"
+				+ "\n {pn} on: tắt cảnh báo"
+				+ "\n {pn} off: bật cảnh báo",
+			en: " {pn} add <words>: add banned words (you can add multiple words separated by commas \",\" or vertical bars \"|\")"
+				+ "\n {pn} delete <words>: delete banned words (you can delete multiple words separated by commas \",\" or vertical bars \"|\")"
+				+ "\n {pn} list <hide | leave blank>: turn off warning (add \"hide\" to hide banned words)"
+				+ "\n {pn} unwarn [<userID> | <@tag>]: remove 1 warning of 1 member"
+				+ "\n {pn} on: turn off warning"
+				+ "\n {pn} off: turn on warning"
 		}
 	},
 
