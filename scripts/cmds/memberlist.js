@@ -17,7 +17,7 @@ module.exports = {
  const threadInfo = await api.getThreadInfo(event.threadID);
  const participants = threadInfo.participantIDs;
 
- let message = `𝗚𝗥𝗢𝗨𝗣 𝗡𝗔𝗠𝗘: ${threadInfo.name}\n𝗥𝗢𝗨𝗣 𝗜𝗗: ${event.threadID}\n`;
+ let message = `𝗚𝗥𝗢𝗨𝗣 𝗡𝗔𝗠𝗘: ${threadInfo.name}\n𝗚𝗥𝗢𝗨𝗣 𝗜𝗗: ${event.threadID}\n`;
 
  for (const userId of participants) {
  const userProfile = await api.getUserInfo(userId);
