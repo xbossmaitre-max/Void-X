@@ -5,15 +5,15 @@ const axios = require('axios');
 module.exports = {
  config: {
  name: "draft",
- version: "2.0.0",
- author: "Your Name & Shaon Ahmed",
+ version: "2.0.1",
+ author: "Shipu Ai",
  countDown: 5,
  role: 2, // Admin-only
  shortDescription: {
  en: "Upload command files to pastebin"
  },
  longDescription: {
- en: "Upload local command files to a pastebin service and get shareable links"
+ en: "Upload local command files to pastebin service and get shareable links"
  },
  category: "developer",
  guide: {
@@ -29,15 +29,12 @@ module.exports = {
  }
 
  const fileName = args[0];
- const commandsPath = path.join(__dirname, '..', 'commands');
+ const commandsPath = path.join(__dirname, '../scripts/cmds'); // Adjusted path
  
  // Check both with and without .js extension
- let filePath = path.join(commandsPath, fileName);
+ let filePath = path.join(commandsPath, fileName + '.js');
  if (!fs.existsSync(filePath)) {
- filePath = path.join(commandsPath, fileName + '.js');
- if (!fs.existsSync(filePath)) {
- return message.reply("❌ File not found in commands folder.");
- }
+ return message.reply(`❌ File "${fileName}.js" not found in commands folder.`);
  }
 
  // Read the file
@@ -47,7 +44,8 @@ module.exports = {
  message.reply("📤 Uploading file to PasteBin, please wait...", async (err, info) => {
  try {
  const response = await axios.post('https://pastebin-api.vercel.app/paste', {
- text: fileContent
+ text: fileContent,
+ language: "javascript"
  });
 
  if (response.data?.id) {
