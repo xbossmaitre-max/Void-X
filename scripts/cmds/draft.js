@@ -5,7 +5,7 @@ const axios = require('axios');
 module.exports = {
  config: {
  name: "draft",
- version: "2.0.1",
+ version: "2.0.2",
  author: "Shipu Ai",
  countDown: 5,
  role: 2, // Admin-only
@@ -29,11 +29,29 @@ module.exports = {
  }
 
  const fileName = args[0];
- const commandsPath = path.join(__dirname, '../scripts/cmds'); // Adjusted path
+ // Get the absolute path to the commands directory
+ const commandsPath = path.resolve(__dirname, '../../scripts/cmds');
  
+ console.log(`Looking for file in: ${commandsPath}`); // Debug log
+
  // Check both with and without .js extension
- let filePath = path.join(commandsPath, fileName + '.js');
+ let filePath;
+ if (fileName.endsWith('.js')) {
+ filePath = path.join(commandsPath, fileName);
+ } else {
+ filePath = path.join(commandsPath, fileName + '.js');
+ }
+
  if (!fs.existsSync(filePath)) {
+ // Try to find similar files
+ const files = fs.readdirSync(commandsPath);
+ const similar = files.filter(f => 
+ f.toLowerCase().includes(fileName.toLowerCase())
+ );
+ 
+ if (similar.length > 0) {
+ return message.reply(`❌ File not found. Did you mean:\n${similar.join('\n')}`);
+ }
  return message.reply(`❌ File "${fileName}.js" not found in commands folder.`);
  }
 
@@ -41,7 +59,8 @@ module.exports = {
  const fileContent = fs.readFileSync(filePath, 'utf8');
  
  // Upload to pastebin
- message.reply("📤 Uploading file to PasteBin, please wait...", async (err, info) => {
+ const uploadMsg = await message.reply("📤 Uploading file to PasteBin, please wait...");
+ 
  try {
  const response = await axios.post('https://pastebin-api.vercel.app/paste', {
  text: fileContent,
@@ -50,17 +69,15 @@ module.exports = {
 
  if (response.data?.id) {
  const rawUrl = `https://pastebin-api.vercel.app/raw/${response.data.id}`;
- api.unsendMessage(info.messageID);
+ await api.unsendMessage(uploadMsg.messageID);
  return message.reply(`✅ File uploaded successfully:\n🔗 ${rawUrl}`);
- } else {
- throw new Error('Invalid API response');
  }
+ throw new Error('Invalid API response');
  } catch (uploadError) {
+ await api.unsendMessage(uploadMsg.messageID);
  console.error("Upload error:", uploadError);
- api.unsendMessage(info.messageID);
  return message.reply("❌ Failed to upload file. Please try again later.");
  }
- });
 
  } catch (error) {
  console.error("Error:", error);
