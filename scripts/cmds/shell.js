@@ -3,28 +3,22 @@ const { exec } = require('child_process');
 module.exports = {
  config: {
  name: "shell",
+ aliases: ["sh"], 
  version: "1.0",
  author: "Samir",
  countDown: 5,
- role: 0,
+ role: 2,
  shortDescription: "Execute shell commands",
  longDescription: "",
- category: "shell",
+ category: "owner",
  guide: {
- vi: "{p}{n} <command>",
- en: "{p}{n} <command>"
+ en: "{p}{n} <command>" // Removed Vietnamese guide for simplicity
  }
  },
 
- onStart: async function ({ event, args, message }) {
- const fuck = args.join(' ');
- const permission = global.GoatBot.config.GOD;
- if (!permission.includes(event.senderID)) {
- api.sendMessage(fuck, event.threadID, event.messageID);
- return;
- }
+ onStart: async function ({ args, message, event, api }) {
  const command = args.join(" ");
-
+ 
  if (!command) {
  return message.reply("Please provide a command to execute.");
  }
