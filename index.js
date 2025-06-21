@@ -17,15 +17,20 @@
  * Cảm ơn bạn đã sử dụng
  */
 const express = require("express");
+const path = require("path");
+const { spawn } = require("child_process");
+const log = require("./logger/log.js");
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Serve 'chitron.html' when '/' is accessed
 app.get("/", (req, res) => {
-  res.send("Goat Bot is running.");
+  res.sendFile(path.join(__dirname, "chitron.html"));
 });
 
 app.listen(PORT, () => {
-  console.log(`Web server running at http://localhost:${PORT}`);
+  console.log(`Serving chitron.html at http://localhost:${PORT}`);
 });
 const { spawn } = require("child_process");
 const log = require("./logger/log.js");
