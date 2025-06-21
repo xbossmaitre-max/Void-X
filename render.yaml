@@ -1,6 +1,14 @@
-# Add to your render.yaml
+# Exported from Render on 2025-06-15T01:18:42ZAdd commentMore actions
 services:
-  - type: web
-    name: 𝐒𝐇𝐈𝐏𝐔 𝐀𝐈 🤖💨
-    healthCheckPath: /healthz
-    healthCheckTimeoutSeconds: 30
+- type: web
+  name: ShipuAiGoatBot
+  runtime: node
+  repo: https://github.com/brandchitron/ShipuAiGoatBot
+  plan: free
+  region: oregon
+  buildCommand: npm install
+  startCommand: node index.js
+  autoDeployTrigger: commit
+	version: "1
+  healthCheckPath: /healthz
+  healthCheckTimeoutSeconds: 30
