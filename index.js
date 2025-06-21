@@ -16,7 +16,17 @@
  * ! Nếu thay đổi nó, bạn sẽ bị cấm vĩnh viễn
  * Cảm ơn bạn đã sử dụng
  */
+const express = require("express");
+const app = express();
+const PORT = process.env.PORT || 3000;
 
+app.get("/", (req, res) => {
+  res.send("Goat Bot is running.");
+});
+
+app.listen(PORT, () => {
+  console.log(`Web server running at http://localhost:${PORT}`);
+});
 const { spawn } = require("child_process");
 const log = require("./logger/log.js");
 
