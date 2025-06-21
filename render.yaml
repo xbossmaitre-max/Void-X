@@ -1,0 +1,6 @@
+# Add to your render.yaml
+services:
+  - type: web
+    name: 𝐒𝐇𝐈𝐏𝐔 𝐀𝐈 🤖💨
+    healthCheckPath: /healthz
+    healthCheckTimeoutSeconds: 30
