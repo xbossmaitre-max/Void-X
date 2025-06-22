@@ -33,6 +33,9 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Serving chitron.html at http://localhost:${PORT}`);
 });
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
 
 function startProject() {
   const child = spawn("node", ["Goat.js"], {
