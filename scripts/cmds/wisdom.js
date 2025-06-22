@@ -51,16 +51,18 @@ module.exports = {
 
  // Schedule hourly messages
  const task = cron.schedule('0 * * * *', () => {
- const now = new Date();
- const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
- const dateString = now.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
-
+				const now = new Date();
+// Convert to Bangladesh Time (UTC+6)
+					const bdTime = new Date(now.getTime() + (6 * 60 * 60 * 1000)); 
+// Format time in BD style
+					const timeString = bdTime.toLocaleTimeString('en-BD', { hour: '2-digit', minute: '2-digit' });
+					const dateString = bdTime.toLocaleDateString('en-BD', { weekday: 'long', month: 'long', day: 'numeric' });
  // Select random wisdom
  const category = Object.keys(wisdomBank)[Math.floor(Math.random() * Object.keys(wisdomBank).length)];
  const message = wisdomBank[category][Math.floor(Math.random() * wisdomBank[category].length)];
 
  api.sendMessage({
- body: `⏰ 𝗧𝗶𝗺𝗲: ${timeString} | ${dateString}\n` +
+ body: `⏰ 𝗧𝗶𝗺𝗲 : ${timeString} | ${dateString}\n` +
  `━━━━━━━━━━━━━━\n` +
  `✨ 𝗪𝗶𝘀𝗱𝗼𝗺 𝗼𝗳 𝘁𝗵𝗲 𝗛𝗼𝘂𝗿 ✨\n` +
  `▸ ${message}\n\n` +
