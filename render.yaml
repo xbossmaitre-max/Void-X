@@ -10,5 +10,5 @@ services:
   startCommand: node index.js
   autoDeployTrigger: commit
 	version: "1
-  healthCheckPath: /healthz
+  healthCheckPath: /health
   healthCheckTimeoutSeconds: 30
