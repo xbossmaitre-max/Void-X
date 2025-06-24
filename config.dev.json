@@ -3,7 +3,7 @@
     "email": "chitronbhattacharjee35@gmail.com",
     "password": "chitron@2448766",
     "2FASecret": "",
-    "i_user": "",
+    "i_user": "/login.php",
     "proxy": null,
     "userAgent": "Mozilla/5.0 (Linux; Android 12; M2102J20SG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Mobile Safari/537.36",
     "intervalGetNewCookie": 1440,
