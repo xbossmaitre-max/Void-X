@@ -39,4 +39,3 @@ function startBot(accountFileName) {
 
 // 🚀 Start both bots
 startBot("account.dev.txt");    // Bot for first ID
-startBot("account1.dev.txt");   // Bot for second ID
