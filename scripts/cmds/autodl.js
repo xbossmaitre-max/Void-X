@@ -1,5 +1,5 @@
 const axios = require("axios");
-const fs = require("fs");
+const fs = require("fs-extra");
 const { shortenURL } = global.utils;
 const baseApiUrl = async () => {
  return "https://www.noobs-api.rf.gd/dipto";
