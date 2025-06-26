@@ -31,15 +31,23 @@ module.exports = {
  return num.toString(); // যদি 1K-এর নিচে হয়, তাহলে নরমাল দেখাবে
  }
 
- // Create leaderboard list
+ // Create leaderboard list with premium styling
  const topUsersList = topUsers.map((user, index) => {
- const moneyFormatted = formatNumber(user.money || 0); // যদি টাকা না থাকে তাহলে "0" দেখাবে
- const medals = ["🥇", "🥈", "🥉"];
- return `${medals[index] || `${index + 1}.`} ${user.name} - ${moneyFormatted}`;
+ const moneyFormatted = formatNumber(user.money || 0);
+ const medals = ["🏆", "🥈", "🥉"];
+ const rankIcons = ["❶", "❷", "❸", "❹", "❺", "❻", "❼", "❽", "❾", "❿", "⓫", "⓬", "⓭", "⓮", "⓯"];
+ 
+ return `${medals[index] || rankIcons[index]} ━ ${user.name} ➛ 𝙿𝚛𝚒𝚡: ${moneyFormatted}`;
  });
 
- // Shortened header and compact design
- const messageText = `👑 𝗧𝗢𝗣 𝗥𝗜𝗖𝗛𝗘𝗦𝗧 𝗨𝗦𝗘𝗥𝗦 👑\n━━━━━━━━━━━\n${topUsersList.join("\n")}`;
+ // Premium styled message with custom font effect
+ const messageText = `
+✨ 𝗧𝗢𝗣 𝗥𝗜𝗖𝗛𝗘𝗦𝗧 𝗨𝗦𝗘𝗥𝗦 𝗟𝗜𝗦𝗧 ✨
+━━━━━━━━━━━━━━━━
+${topUsersList.join("\n")}
+━━━━━━━━━━━━━━━━
+💎 𝗖𝗼𝗻𝗴𝗿𝗮𝘁𝘀 𝘁𝗼 𝗮𝗹𝗹 𝘁𝗵𝗲 𝗪𝗶𝗻𝗻𝗲𝗿𝘀! 💎
+ `;
 
  message.reply(messageText);
  }
