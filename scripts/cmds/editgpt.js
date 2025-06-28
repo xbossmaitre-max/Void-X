@@ -6,7 +6,7 @@ module.exports = {
  author: "ChatGpt",
  countDown: 5,
  longDescription: "",
- category: "image",
+ category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
  guide: {
  en: "/edit make this image black white"
  }
