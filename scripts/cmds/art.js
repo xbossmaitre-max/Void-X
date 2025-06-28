@@ -7,7 +7,7 @@ module.exports = {
  author: "OtinXSandip",
  countDown: 5,
  longDescription: "Art images",
- category: "AI",
+ category: "𝗔𝗜 & 𝗚𝗣𝗧",
  guide: {
  en: "${pn} reply to an image with a prompt and choose model 1 - 52"
  }
