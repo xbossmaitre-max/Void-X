@@ -12,7 +12,7 @@ module.exports = {
 			vi: "bật chế độ không làm phiền, khi bạn được tag bot sẽ thông báo",
 			en: "turn on do not disturb mode, when you are tagged bot will notify"
 		},
-		category: "box chat",
+		category: "𝗕𝗢𝗫",
 		guide: {
 			vi: " {pn} [để trống | <lý do>]: bật chế độ không làm phiền"
 				+ "\n {pn} off: tắt chế độ không làm phiền",
