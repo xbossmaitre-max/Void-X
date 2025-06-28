@@ -10,7 +10,7 @@ module.exports = {
  vi: "",
  en: "{pn}Bank:\nInterest - Balance\n - Withdraw \n- Deposit \n- Transfer \n- Richest"
  },
- category: "💰 Economy",
+ category: "𝗪𝗔𝗟𝗟𝗘𝗧",
  countDown: 15,
  role: 0,
  author: "Loufi | SiAM | Samuel\n\nModified: Shikaki"
