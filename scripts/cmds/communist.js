@@ -15,7 +15,7 @@ module.exports = {
     description: {
       en: "Adds a communist-style red filter to your or someone else's avatar"
     },
-    category: "image",
+    category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
     guide: {
       en: "{p}communism [@mention or reply]\n\nDefault: Your own profile picture"
     }
