@@ -15,7 +15,7 @@ module.exports = {
     description: {
       en: "Turns your or mentioned user's profile picture into a greyscale image"
     },
-    category: "image",
+    category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
     guide: {
       en: "{p}greyscale [@mention or reply]\nIf no mention or reply, uses your profile picture."
     }
