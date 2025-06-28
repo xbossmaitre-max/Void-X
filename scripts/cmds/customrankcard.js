@@ -15,7 +15,7 @@ module.exports = {
 			vi: "Thiết kế thẻ rank theo ý bạn",
 			en: "Design rank card by your own"
 		},
-		category: "rank",
+		category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
 		guide: {
 			vi: {
 				body: "   {pn} [maincolor | subcolor | linecolor | expbarcolor | progresscolor | alphasubcolor | textcolor | namecolor | expcolor | rankcolor | levelcolor | reset] <value>"
