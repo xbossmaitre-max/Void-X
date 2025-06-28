@@ -13,7 +13,7 @@ module.exports = {
     longDescription: {
       en: 'Convert a prompt and image to an image'
     },
-    category: "image",
+    category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
     guide: {
       en: '{pn} prompt | model'
     }
