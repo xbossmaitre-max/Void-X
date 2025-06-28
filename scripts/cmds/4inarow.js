@@ -6,7 +6,7 @@ module.exports = {
  author: "Your Name",
  countDown: 30,
  role: 0,
- category: "game",
+ category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
  shortDescription: {
  en: "🟡🔴 4-in-a-Row with PvE/PvP modes"
  },
