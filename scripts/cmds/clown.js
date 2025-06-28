@@ -15,7 +15,7 @@ module.exports = {
     description: {
       en: "Applies a clown face effect to your or mentioned user's avatar"
     },
-    category: "image",
+    category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
     guide: {
       en: "{p}clown [@mention or reply]\nIf no mention or reply, uses your profile picture."
     }
