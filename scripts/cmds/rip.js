@@ -11,7 +11,7 @@ module.exports = {
     role: 0,
     shortDescription: "rip image",
     longDescription: "rip image",
-    category: "fun",
+    category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
     guide: {
       vi: "{pn} [@tag | blank]",
       en: "{pn} [@tag]"
