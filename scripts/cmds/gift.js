@@ -11,7 +11,7 @@ module.exports = {
  description: {
  en: "Transfer money to another user by tagging them"
  },
- category: "economy",
+ category: "𝗪𝗔𝗟𝗟𝗘𝗧",
  guide: {
  en: "{pn} @user <amount>"
  }
