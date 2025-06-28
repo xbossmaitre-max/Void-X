@@ -14,7 +14,7 @@ module.exports = {
  vi: '',
  en: "Generate images"
  },
- category: "ai",
+ category: "𝗔𝗜 & 𝗚𝗣𝗧",
  guide: {
  vi: '',
  en: "{pn} <prompt>"
