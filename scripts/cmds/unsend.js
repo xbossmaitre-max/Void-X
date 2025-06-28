@@ -10,7 +10,7 @@ const { GoatWrapper } = require("fca-liane-utils");module.exports = {
 			vi: "Gỡ tin nhắn của bot",
 			en: "Unsend bot's message"
 		},
-		category: "box chat",
+		category: "𝗕𝗢𝗫",
 		guide: {
 			vi: "reply tin nhắn muốn gỡ của bot và gọi lệnh {pn}",
 			en: "reply the message you want to unsend and call the command {pn}"
