@@ -5,7 +5,7 @@ module.exports = {
  author: "Your Name",
  countDown: 5,
  role: 0,
- category: "game",
+ category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
  shortDescription: {
  en: "💰 Rock/Paper/Scissors Betting Game"
  },
