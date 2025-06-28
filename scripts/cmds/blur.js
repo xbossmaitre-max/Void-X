@@ -15,7 +15,7 @@ module.exports = {
     description: {
       en: "Adds a blur effect to your or mentioned user's profile picture"
     },
-    category: "image",
+    category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
     guide: {
       en: "{p}blur [@mention or reply]\nIf no mention or reply, uses your profile picture."
     }
