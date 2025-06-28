@@ -15,7 +15,7 @@ module.exports = {
     description: {
       en: "Creates an opinion meme with your custom text and image"
     },
-    category: "image",
+    category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
     guide: {
       en: "{p}opinion <text> [@mention or reply]\nExample: {p}opinion popcatdev api sucks\nIf no mention or reply, uses your profile picture."
     }
