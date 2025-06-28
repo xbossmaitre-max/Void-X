@@ -4,7 +4,7 @@ module.exports = {
  version: "1.0",
  author: "Loid",
  shortDescription: "Play rock-paper-scissors game with the bot.",
- category: "game",
+ category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
  guide: "{prefix}rps <rock|paper|scissors>"
  },
  onStart: async function ({ message, args }) {
