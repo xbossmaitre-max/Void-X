@@ -15,7 +15,7 @@ module.exports = {
     description: {
       en: "Creates a Nokia-style image using your or mentioned user's avatar"
     },
-    category: "image",
+    category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
     guide: {
       en: "{p}nokia [@mention or reply]\n\nDefault: Your profile picture"
     }
