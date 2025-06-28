@@ -24,7 +24,7 @@ module.exports = {
  shortDescription: "Generate images with FLUX API (-m 1/2/3 for model style)",
  longDescription:
  "Generates 4 images based on a prompt and model style, combines them, and lets you select one.",
- category: "𝗔𝗜",
+ category: "𝗔𝗜 & 𝗚𝗣𝗧",
  guide: {
  en: "{pn} <prompt> [-m 1/2/3]\nModels:\n1: flux.1-schnell\n2: flux.1-dev\n3: flux.1-pro",
  },
