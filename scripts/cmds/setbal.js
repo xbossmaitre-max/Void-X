@@ -10,7 +10,7 @@ module.exports = {
  description: {
  en: "Set the balance of a user (admin only)"
  },
- category: "economy",
+ category: "𝗪𝗔𝗟𝗟𝗘𝗧",
  guide: {
  en: "{pn} @user <amount>"
  }
