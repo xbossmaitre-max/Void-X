@@ -15,7 +15,7 @@ module.exports = {
     description: {
       en: "Creates a mocking text meme image with the text you provide"
     },
-    category: "fun",
+    category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
     guide: {
       en: "{p}mock <text>\nExample: {p}mock hello"
     }
