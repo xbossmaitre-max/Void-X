@@ -11,7 +11,7 @@ module.exports = {
  longDescription: {
  en: " ",
  },
- category: "game",
+ category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
  guide: {
  en: "",
  },
