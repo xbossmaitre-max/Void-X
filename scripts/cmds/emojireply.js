@@ -7,7 +7,7 @@ module.exports = {
     role: 0,
     shortDescription: "Auto-reply to emoji with random emoji pairs",
     longDescription: "Automatically replies to any emoji message with random emoji combinations",
-    category: "fun",
+    category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
     guide: {
       en: "Use 'emojireply on' to enable or 'emojireply off' to disable. Default is off."
     }
