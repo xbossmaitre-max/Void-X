@@ -15,7 +15,7 @@ module.exports = {
     description: {
       en: "Generates a caution style meme image using your text"
     },
-    category: "fun",
+    category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
     guide: {
       en: "{p}caution <text>\nExample: {p}caution Be careful!"
     }
