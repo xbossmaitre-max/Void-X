@@ -15,7 +15,7 @@ module.exports = {
     description: {
       en: "Use two mentions or reply to two messages to create a Who Would Win meme"
     },
-    category: "image",
+    category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
     guide: {
       en: "{p}winw @user1 vs @user2\nExample: {p}winw @alice vs @bob"
     }
