@@ -15,7 +15,7 @@ module.exports = {
     description: {
       en: "Creates an ad style meme from your or mentioned user's profile picture"
     },
-    category: "image",
+    category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
     guide: {
       en: "{p}ad [@mention or reply]\nIf no mention or reply, uses your profile picture."
     }
