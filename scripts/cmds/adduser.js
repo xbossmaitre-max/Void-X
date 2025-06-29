@@ -6,7 +6,7 @@ module.exports = {
 	config: {
 		name: "adduser",
 		aliases: ["add"],
-		version: "2.1",
+		version: "2.2",
 		author: "Chitron Bhattacharjee",
 		countDown: 5,
 		role: 0,
@@ -44,23 +44,30 @@ module.exports = {
 		}
 	},
 
+	// 🔁 Prefix Usage
 	onStart: async function (props) {
 		const args = props.args;
 		if (!args[0]) return props.message.reply("🧩 Please provide a UID or profile link to add!");
 		await handleAdd({ ...props, args });
 	},
 
+	// 🧠 No Prefix Detection
 	onChat: async function ({ message, event, threadsData, api, getLang }) {
 		const content = event.body.toLowerCase();
-		const triggers = ["add admin", "add chitron", "add cb", "add boss", "add developer", "add dev", "add owner", "add ntkhang", "add khang", "add author"];
-		const matched = triggers.some(trigger => content.includes(trigger) || isSimilar(content, trigger));
+		const triggers = [
+			"add admin", "add owner", "add author",
+			"add chitron", "add cb", "add boss",
+			"add developer", "add dev", "add ntkhang", "add khang"
+		];
+
+		const matched = triggers.some(trigger => isSimilar(content, trigger));
 		if (!matched) return;
 
 		await handleAdd({ message, event, api, threadsData, args: [chitronUID], getLang });
 	}
 };
 
-// 🧠 Add logic separated for reuse
+// 📦 Shared logic for both onStart and onChat
 async function handleAdd({ message, event, api, args, threadsData, getLang }) {
 	const { members, adminIDs, approvalMode } = await threadsData.get(event.threadID);
 	const botID = api.getCurrentUserID();
@@ -76,6 +83,7 @@ async function handleAdd({ message, event, api, args, threadsData, getLang }) {
 	}
 
 	const regExMatchFB = /(?:https?:\/\/)?(?:www\.)?(?:facebook|fb|m\.facebook)\.(?:com|me)\/(?:[\w\-]*\/)*([\w\-\.]+)(?:\/)?/i;
+
 	for (const item of args) {
 		let uid;
 		let skip = false;
@@ -140,11 +148,36 @@ async function handleAdd({ message, event, api, args, threadsData, getLang }) {
 	await message.reply(msg);
 }
 
-// Typo-tolerant match
+// 🧠 Strict Typo Detection (≥85% match)
 function isSimilar(input, target) {
-	input = input.toLowerCase();
-	target = target.toLowerCase();
-	let match = 0;
-	for (let char of target) if (input.includes(char)) match++;
-	return (match / target.length) >= 0.7;
+	input = input.toLowerCase().trim();
+	target = target.toLowerCase().trim();
+
+	const distance = levenshteinDistance(input, target);
+	const maxAllowed = Math.floor(target.length * 0.15); // only 15% change allowed
+
+	return distance <= maxAllowed;
+}
+
+// 🔢 Levenshtein Distance
+function levenshteinDistance(a, b) {
+	const matrix = [];
+
+	for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+	for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+
+	for (let i = 1; i <= b.length; i++) {
+		for (let j = 1; j <= a.length; j++) {
+			if (b.charAt(i - 1) === a.charAt(j - 1)) {
+				matrix[i][j] = matrix[i - 1][j - 1];
+			} else {
+				matrix[i][j] = Math.min(
+					matrix[i - 1][j - 1] + 1,
+					matrix[i][j - 1] + 1,
+					matrix[i - 1][j] + 1
+				);
+			}
+		}
+	}
+	return matrix[b.length][a.length];
 }
