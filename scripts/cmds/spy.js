@@ -1,8 +1,7 @@
 const axios = require("axios");
+
 const baseApiUrl = async () => {
- const base = await axios.get(
- `https://raw.githubusercontent.com/Blankid018/D1PT0/main/baseApiUrl.json`,
- );
+ const base = await axios.get(`https://raw.githubusercontent.com/Blankid018/D1PT0/main/baseApiUrl.json`);
  return base.data.api;
 };
 
@@ -10,24 +9,17 @@ module.exports = {
  config: {
  name: "spy",
  aliases: ["whoishe", "whoisshe", "whoami", "atake"],
- version: "1.0",
+ version: "2.1",
+ author: "Chitron Bhattacharjee",
  role: 0,
- author: "Dipto",
- Description: "Get user information and profile photo",
- category: "information",
  countDown: 10,
+ description: "Get user information and a styled banner",
+ category: "information"
  },
 
- onStart: async function ({
- event,
- message,
- usersData,
- api,
- args,
- }) {
- const uid1 = event.senderID;
-
- const uid2 = Object.keys(event.mentions)[0];
+ onStart: async function ({ event, message, usersData, api, args }) {
+ const uidSelf = event.senderID;
+ const uidMentioned = Object.keys(event.mentions)[0];
  let uid;
 
  if (args[0]) {
@@ -35,79 +27,95 @@ module.exports = {
  uid = args[0];
  } else {
  const match = args[0].match(/profile\.php\?id=(\d+)/);
- if (match) {
- uid = match[1];
- }
+ if (match) uid = match[1];
  }
  }
 
- if (!uid) {
- uid =
- event.type === "message_reply"
+ if (!uid)
+ uid = event.type === "message_reply"
  ? event.messageReply.senderID
- : uid2 || uid1;
- }
- const response = await require("axios").get(
- `${await baseApiUrl()}/baby?list=all`
- );
- const dataa = response.data || { teacher: { teacherList: [] } };
- let babyTeach = 0;
-
- if (dataa?.teacher?.teacherList?.length) {
- babyTeach = dataa.teacher.teacherList.find((t) => t[uid])?.[uid] || 0;
- }
+ : uidMentioned || uidSelf;
 
  const userInfo = await api.getUserInfo(uid);
  const avatarUrl = await usersData.getAvatarUrl(uid);
+ const user = userInfo[uid];
 
- let genderText;
- switch (userInfo[uid].gender) {
- case 1:
- genderText = "𝙶𝚒𝚛𝚕🙋🏻‍♀️";
- break;
- case 2:
- genderText = "Boy🙋🏻‍♂️";
- break;
- default:
- genderText = "𝙶𝚊𝚢🤷🏻‍♂️";
- }
+ const nickname = (await usersData.get(uid))?.nickName || user.alternateName || "𝙽𝚘𝚗𝚎";
+ const username = user.vanity || "𝙽𝚘𝚗𝚎";
+ const profileUrl = user.profileUrl || "𝙿𝚛𝚒𝚟𝚊𝚝𝚎";
+ const birthday = user.isBirthday !== false ? user.isBirthday : "𝙿𝚛𝚒𝚟𝚊𝚝𝚎";
+ const gender = user.gender === 1 ? "👧 Girl" : user.gender === 2 ? "👦 Boy" : "🌀 Undefined";
+ const isFriend = user.isFriend ? "✅ Yes" : "❌ No";
+ const position = user.type?.toUpperCase() || "Normal User";
 
- const money = (await usersData.get(uid)).money;
- const allUser = await usersData.getAll(), rank = allUser.slice().sort((a, b) => b.exp - a.exp).findIndex(user => user.userID === uid) + 1, moneyRank = allUser.slice().sort((a, b) => b.money - a.money).findIndex(user => user.userID === uid) + 1;
+ const allUser = await usersData.getAll();
+ const userData = await usersData.get(uid);
+ const money = userData.money || 0;
+ const exp = userData.exp || 0;
 
- const position = userInfo[uid].type;
+ const rank = allUser.slice().sort((a, b) => b.exp - a.exp)
+ .findIndex(u => u.userID === uid) + 1;
 
- const userInformation = `
-╭────[ 𝐔𝐒𝐄𝐑 𝐈𝐍𝐅𝐎 ]
-├‣ 𝙽𝚊𝚖𝚎: ${userInfo[uid].name}
-├‣ 𝙶𝚎𝚗𝚍𝚎𝚛: ${genderText}
-├‣ 𝚄𝙸𝙳: ${uid}
-├‣ 𝙲𝚕𝚊𝚜𝚜: ${position ? position?.toUpperCase() : "𝙽𝚘𝚛𝚖𝚊𝚕 𝚄𝚜𝚎𝚛🥺"}
-├‣ 𝚄𝚜𝚎𝚛𝚗𝚊𝚖𝚎: ${userInfo[uid].vanity ? userInfo[uid].vanity : "𝙽𝚘𝚗𝚎"}
-├‣ 𝙿𝚛𝚘𝚏𝚒𝚕𝚎 𝚄𝚁𝙻: ${userInfo[uid].profileUrl}
-├‣ 𝙱𝚒𝚛𝚝𝚑𝚍𝚊𝚢: ${userInfo[uid].isBirthday !== false ? userInfo[uid].isBirthday : "𝙿𝚛𝚒𝚟𝚊𝚝𝚎"}
-├‣ 𝙽𝚒𝚌𝚔𝙽𝚊𝚖𝚎: ${userInfo[uid].alternateName || "𝙽𝚘𝚗𝚎"}
-╰‣ 𝙵𝚛𝚒𝚎𝚗𝚍 𝚠𝚒𝚝𝚑 𝚋𝚘𝚝: ${userInfo[uid].isFriend ? "𝚈𝚎𝚜✅" : "𝙽𝚘❎"}
+ const moneyRank = allUser.slice().sort((a, b) => b.money - a.money)
+ .findIndex(u => u.userID === uid) + 1;
 
-╞═════𖠁[ 𝐔𝐒𝐄𝐑 𝐒𝐓𝐀𝐓𝐒 ]𖠁═════╡\n
-╔══════✮❁•°♛°•❁✮ ═════╗
+ // Baby teach system
+ let babyTeach = 0;
+ try {
+ const res = await axios.get(`${await baseApiUrl()}/baby?list=all`);
+ const babyList = res.data?.teacher?.teacherList || [];
+ babyTeach = babyList.find(t => t[uid])?.[uid] || 0;
+ } catch { }
 
- 𝙼𝚘𝚗𝚎𝚢: $${formatMoney(money)}
-├‣ 𝚁𝚊𝚗𝚔: #${rank}/${allUser.length}
-├‣ 𝙼𝚘𝚗𝚎𝚢 𝚁𝚊𝚗𝚔: #${moneyRank}/${allUser.length}
-╰▻𝙱𝚊𝚋𝚢 𝚝𝚎𝚊𝚌𝚑: ${babyTeach || 0}\n ╚══════✮❁•°❀°•❁✮══════╝
-`;
+ const info = `
+╭─🎀 𝗨𝗦𝗘𝗥 𝗜𝗡𝗙𝗢 🎀─╮
+👤 𝗡𝗮𝗺𝗲: ${user.name}
+🆔 𝗨𝗜𝗗: ${uid}
+⚧ 𝗚𝗲𝗻𝗱𝗲𝗿: ${gender}
+🧭 𝗥𝗼𝗹𝗲: ${position}
+🔗 𝗨𝘀𝗲𝗿𝗻𝗮𝗺𝗲: ${username}
+🌐 𝗣𝗿𝗼𝗳𝗶𝗹𝗲: ${profileUrl}
+🎂 𝗕𝗶𝗿𝘁𝗵𝗱𝗮𝘆: ${birthday}
+🤝 𝗙𝗿𝗶𝗲𝗻𝗱 𝗪𝗶𝘁𝗵 𝗕𝗼𝘁: ${isFriend}
+╰─────────────╯
 
- message.reply({
- body: userInformation,
- attachment: await global.utils.getStreamFromURL(avatarUrl),
+╭── 📊 𝗦𝗧𝗔𝗧𝗦 📊 ──╮
+💰 𝗠𝗼𝗻𝗲𝘆: $${formatMoney(money)}
+📈 𝗥𝗮𝗻𝗸: #${rank}/${allUser.length}
+💸 𝗠𝗼𝗻𝗲𝘆 𝗥𝗮𝗻𝗸: #${moneyRank}/${allUser.length}
+👶 𝗕𝗮𝗯𝘆 𝗧𝗲𝗮𝗰𝗵: ${babyTeach}
+╰─────────────╯
+
+✨ 𝘉𝘰𝘵 𝘣𝘺: 𝘊𝘩𝘪𝘵𝘳𝘰𝘯 𝘉𝘩𝘢𝘵𝘵𝘢𝘤𝘩𝘢𝘳𝘫𝘦𝘦 ✨`.trim();
+
+ // Generate banner via Popcat API
+ const bannerUrl = `https://api.popcat.xyz/welcomecard` +
+ `?username=${encodeURIComponent(user.name)}` +
+ `&discriminator=${uid.slice(-4)}` +
+ `&avatar=${encodeURIComponent(avatarUrl)}` +
+ `&background=${encodeURIComponent("https://shipu.c0m.in/banner.png")}` +
+ `&color=${randomColor()}` +
+ `&text1=${encodeURIComponent(user.name)}` +
+ `&text2=${encodeURIComponent("API Owner—")}` +
+ `&text3=${encodeURIComponent("Chitron Bhattacharjee")}`;
+
+ return message.reply({
+ body: info,
+ attachment: await global.utils.getStreamFromURL(bannerUrl)
  });
- },
+ }
 };
 
+// Format large numbers with suffix
 function formatMoney(num) {
- const units = ["", "K", "M", "B", "T", "Q", "Qi", "Sx", "Sp", "Oc", "N", "D"];
+ const units = ["", "K", "M", "B", "T", "Q", "Qi", "Sx", "Sp", "Oc", "N"];
  let unit = 0;
  while (num >= 1000 && ++unit < units.length) num /= 1000;
  return num.toFixed(1).replace(/\.0$/, "") + units[unit];
- }
+}
+
+// Random color for banner
+function randomColor() {
+ const colors = ["red", "blue", "purple", "green", "yellow", "pink", "orange", "aqua"];
+ return colors[Math.floor(Math.random() * colors.length)];
+}
