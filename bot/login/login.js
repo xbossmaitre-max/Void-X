@@ -1,52 +1,69 @@
-process.on('unhandledRejection', error => console.log(error));
-process.on('uncaughtException', error => console.log(error));
+process.on('unhandledRejection', error => console.error(error));
+process.on('uncaughtException', error => console.error(error));
 
 // Set bash title
-process.stdout.write("\x1b]2;It's ShiPu Ai - Optimised by Chitron Bhattacharjee\x1b\x5c");
+process.stdout.write("\x1b]2;Shipu AI - Made by Chitron Bhattacharjee\x1b\x5c");
 
-// Improved require and initialization
-const defaultRequire = require;
-const fs = defaultRequire("fs-extra");
-const path = defaultRequire("path");
-const axios = defaultRequire("axios");
-const readline = defaultRequire("readline");
-const gradient = defaultRequire("gradient-string");
-const toptp = defaultRequire("totp-generator");
-const qr = new (defaultRequire("qrcode-reader"))();
-const Canvas = defaultRequire("canvas");
-const https = defaultRequire("https");
-
-// Enhanced path resolution
-function resolvePath(filePath, fallback = "") {
-  try {
-    return path.resolve(process.cwd(), filePath || fallback);
-  } catch (err) {
-    console.error("PATH ERROR:", err.message);
-    return path.resolve(process.cwd(), fallback);
-  }
-}
-
-// Safe file operations
-async function safeFileOps(filePath, operation, fallback) {
-  try {
-    if (!fs.existsSync(filePath)) throw new Error("File not found");
-    return await operation(filePath);
-  } catch (err) {
-    console.error("FILE ERROR:", err.message);
-    return fallback;
-  }
-}
+const fs = require("fs-extra");
+const path = require("path");
+const axios = require("axios");
+const readline = require("readline");
+const gradient = require("gradient-string");
+const colors = require("colors");
+const { promisify } = require("util");
 
 // Main login class
-class GoatBotLogin {
+class ShipuAiLogin {
   constructor() {
-    this.dirAccount = resolvePath(global.client?.dirAccount || "account.dev.txt");
+    this.dirAccount = this.resolvePath(global.client?.dirAccount || "account.dev.txt");
     this.config = global.GoatBot?.config || {};
     this.currentVersion = require("../../package.json").version;
+    this.titles = this.getTitleArt();
     this.init().catch(err => {
       console.error("INIT ERROR:", err);
       process.exit(1);
     });
+  }
+
+  getTitleArt() {
+    return [
+      [
+        "███████╗██╗  ██╗██╗██████╗ ██╗   ██╗",
+        "██╔════╝██║  ██║██║██╔══██╗██║   ██║",
+        "███████╗███████║██║██████╔╝██║   ██║",
+        "╚════██║██╔══██║██║██╔═══╝ ██║   ██║",
+        "███████║██║  ██║██║██║     ╚██████╔╝",
+        "╚══════╝╚═╝  ╚═╝╚═╝╚═╝      ╚═════╝",
+        "",
+        " █████╗ ██╗",
+        "██╔══██╗██║",
+        "███████║██║",
+        "██╔══██║██║",
+        "██║  ██║██║",
+        "╚═╝  ╚═╝╚═╝"
+      ],
+      [
+        "Shipu",
+        "  AI",
+        "",
+        "made by Chitron Bhattacharjee"
+      ],
+      [
+        `Shipu AI @${this.currentVersion}`
+      ],
+      [
+        "Shipu AI"
+      ]
+    ];
+  }
+
+  resolvePath(filePath, fallback = "") {
+    try {
+      return path.resolve(process.cwd(), filePath || fallback);
+    } catch (err) {
+      console.error("PATH ERROR:", err.message);
+      return path.resolve(process.cwd(), fallback);
+    }
   }
 
   async init() {
@@ -56,29 +73,58 @@ class GoatBotLogin {
   }
 
   async showWelcome() {
-    const titles = [
-      // ... (keep your existing title art)
-    ];
-    
-    const maxWidth = process.stdout.columns;
-    const title = maxWidth > 58 ? titles[0] : 
-                 maxWidth > 36 ? titles[1] : 
-                 maxWidth > 26 ? titles[2] : titles[3];
-
-    console.log(gradient("#f5af19", "#f12711")(this.createLine(null, true)));
-    console.log();
-    
-    for (const text of title) {
-      const textColor = gradient("#FA8BFF", "#2BD2FF", "#2BFF88")(text);
-      this.centerText(textColor, text.length);
+    try {
+      const maxWidth = process.stdout.columns || 80;
+      const titleSet = this.getTitleForWidth(maxWidth);
+      
+      console.log(gradient("#f5af19", "#f12711")(this.createLine(null, true)));
+      console.log();
+      
+      for (const text of titleSet) {
+        const textColor = text.includes("made by") 
+          ? gradient("#888888", "#AAAAAA")(text) 
+          : gradient("#FA8BFF", "#2BD2FF", "#2BFF88")(text);
+        this.centerText(textColor, text.length);
+      }
+      
+      const subTitle = `Shipu AI @${this.currentVersion} - Advanced AI Assistant`;
+      this.centerText(gradient("#9F98E8", "#AFF6CF")(subTitle), subTitle.length);
+      
+      const srcUrl = "https://raw.githubusercontent.com/ntkhang03/Goat-Bot-V2/main/package.json";
+      this.centerText(gradient("#9F98E8", "#AFF6CF")(srcUrl), srcUrl.length);
+    } catch (err) {
+      console.error("WELCOME ERROR:", err);
     }
+  }
+
+  getTitleForWidth(width) {
+    if (width > 58) return this.titles[0];
+    if (width > 36) return this.titles[1];
+    if (width > 26) return this.titles[2];
+    return this.titles[3];
+  }
+
+  centerText(text, length) {
+    const width = process.stdout.columns;
+    const leftPadding = Math.floor((width - (length || text.length)) / 2);
+    const rightPadding = width - leftPadding - (length || text.length);
+    const paddedString = ' '.repeat(Math.max(0, leftPadding)) + text + ' '.repeat(Math.max(0, rightPadding));
+    console.log(paddedString);
+  }
+
+  createLine(content, isMaxWidth = false) {
+    const width = isMaxWidth ? process.stdout.columns : Math.min(process.stdout.columns, 50);
+    if (!content) return '─'.repeat(width);
     
-    // ... (rest of your welcome message)
+    content = ` ${content.trim()} `;
+    const lineLength = width - content.length;
+    const left = Math.floor(lineLength / 2);
+    return '─'.repeat(left) + content + '─'.repeat(lineLength - left);
   }
 
   async checkVersion() {
     try {
-      const { data: version } = await axios.get(
+      const { data: { version } } = await axios.get(
         "https://raw.githubusercontent.com/ntkhang03/Goat-Bot-V2/main/package.json",
         { timeout: 5000 }
       );
@@ -91,37 +137,6 @@ class GoatBotLogin {
     }
   }
 
-  async startBot() {
-    console.log(colors.hex("#f5ab00")(this.createLine("START LOGGING IN", true)));
-    
-    try {
-      const appState = await this.getAppState();
-      await this.loginBot(appState);
-    } catch (err) {
-      console.error("Login failed:", err);
-      process.exit(1);
-    }
-  }
-
-  async getAppState() {
-    // Implement your app state retrieval logic here
-    // With improved error handling and validation
-  }
-
-  async loginBot(appState) {
-    // Implement your bot login logic here
-    // With proper error handling and state management
-  }
-
-  // Utility methods
-  centerText(text, length) {
-    // ... (your existing implementation)
-  }
-
-  createLine(content, isMaxWidth = false) {
-    // ... (your existing implementation)
-  }
-
   compareVersion(v1, v2) {
     const parts1 = v1.split('.').map(Number);
     const parts2 = v2.split('.').map(Number);
@@ -131,7 +146,19 @@ class GoatBotLogin {
     }
     return 0;
   }
+
+  async startBot() {
+    console.log(colors.hex("#f5ab00")(this.createLine("STARTING SHIPU AI", true)));
+    
+    try {
+      // Bot startup logic here
+      console.log("Shipu AI initializing...");
+    } catch (err) {
+      console.error("STARTUP ERROR:", err);
+      process.exit(1);
+    }
+  }
 }
 
 // Start the bot
-new GoatBotLogin();
+new ShipuAiLogin();
