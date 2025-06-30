@@ -30,7 +30,7 @@ module.exports.onStart = async ({
 
  try {
  if (!args[0]) {
- const ran = ["Bolo baby", "hum", "type help baby", "type !baby hi"];
+ const ran = ["Bolo baby", "hum", "type help baby", "type +baby hi"];
  return api.sendMessage(ran[Math.floor(Math.random() * ran.length)], event.threadID, event.messageID);
  }
 
@@ -161,7 +161,15 @@ module.exports.onChat = async ({
  const body = event.body ? event.body?.toLowerCase() : ""
  if (body.startsWith("baby") || body.startsWith("bby") || body.startsWith("বেবি") || body.startsWith("bot") || body.startsWith("fahad") || body.startsWith("babu") || body.startsWith("বট")) {
  const arr = body.replace(/^\S+\s*/, "")
- const randomReplies = ["🦆", "𝙃𝙤𝙥 𝙗𝙚𝙙𝙖🦆, 𝘽𝙤𝙨𝙨 বল 𝙗𝙤𝙨𝙨🦆", "𝙒𝙝𝙖𝙩'𝙨 𝙪𝙥?", "বলো কি বলবা, সবার সামনে বলবা নাকি?🦆💨", "𝙣𝙚𝙬 𝙢𝙮 𝙜𝙧𝙤𝙪𝙥 𝙢𝙚𝙨𝙨𝙚𝙣𝙜𝙚𝙧 𝙙𝙚𝙬 https://m.me/j/AbbsaI-MMs17DDds/", "আমাকে ডাকলে, আমি কিন্তূ কিস করে দেবো🦆", "𝘽𝘼𝘽𝙐 𝙆𝙃𝙐𝘿𝘼 𝙇𝘼𝙂𝙎𝙀🦆"];
+ const randomReplies = [
+  "😏 Tui bollei mon gulo fuler moto fute uthe",
+  "😉 Ei raat e tumi aar ami... kichu ekta spicy hobe naki?",
+  "💋 Tor voice ta amar heart-er ringtone hote pare!",
+  "😼 Dekhlei tor chokh e chemistry lage... physics nai?",
+  "😇 Bujhlam, tui flirt kora sikhli amar theke!",
+  "🥀 Tui jodi chash hoye jash, ami tor ghum bhenge debo...",
+  "👀 Toke dekhe mon chay... daily dekhi!",
+];
  if (!arr) {
 
  await api.sendMessage(randomReplies[Math.floor(Math.random() * randomReplies.length)], event.threadID, (error, info) => {
