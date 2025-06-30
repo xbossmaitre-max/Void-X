@@ -113,7 +113,7 @@ class ShipuAiLogin {
 
   centerText(text, length) {
     const width = process.stdout.columns || 80;
-    const padLength = Math.max(0, Math.floor((width - (length || text.length)) / 2);
+    const padLength = Math.max(0, Math.floor((width - (length || text.length)) / 2));
     console.log(' '.repeat(padLength) + text);
   }
 
