@@ -1,54 +1,80 @@
+const axios = require("axios");
+const fs = require("fs-extra");
+const path = require("path");
+const https = require("https");
+
 module.exports = {
- config: {
- name: "fakechat",
- aliases: ["fchat","fakec"],
- version: "1.0",
- role: 1,
- premium: true,
- author: "Dipto",
- Description: "Get a fake chat of user",
- category: "system",
- countDown: 10,
- },
- onStart: async ({ event, message, usersData, api, args }) => {
- try{
- const userText = args.join(" ");
- const uid1 = event.senderID;
+  config: {
+    name: "fakechat",
+    version: "1.4",
+    author: "Chitron Bhattacharjee",
+    countDown: 5,
+    role: 0,
+    aliases: ["chatedit", "fchat"],
+    shortDescription: {
+      en: "Generate fake Messenger screenshot"
+    },
+    description: {
+      en: "Create a fake Messenger screenshot with UID/mention and custom messages"
+    },
+    category: "fun",
+    guide: {
+      en: "+fakechat <@mention or UID> - <text1> - [text2] - [mode=dark]\n\nAutomatically fetches name from UID.\nEach use costs 50 coins.\nDefault mode is light."
+    }
+  },
 
- const uid2 = Object.keys(event.mentions)[0];
- let uid;
+  onStart: async function ({ args, message, event, api, usersData }) {
+    if (args.length < 2) return message.reply("⚠️ Usage:\n+fakechat <@mention or UID> - <text1> - [text2] - [mode]");
 
- if (args[0]) {
- if (/^\d+$/.test(args[0])) {
- uid = args[0];
- } else {
- const match = args[0].match(/profile\.php\?id=(\d+)/);
- if (match) {
- uid = match[1];
- }
- }
- }
+    const input = args.join(" ").split("-").map(i => i.trim());
+    let [target, text1, text2 = "", modeRaw = "light"] = input;
 
- if (!uid) {
- uid =
- event.type === "message_reply"
- ? event.messageReply.senderID
- : uid2 || uid1;
- }
+    // Get UID from mention or raw input
+    let uid;
+    if (Object.keys(event.mentions).length > 0) {
+      uid = Object.keys(event.mentions)[0];
+    } else if (/^\d{6,}$/.test(target)) {
+      uid = target;
+    } else {
+      return message.reply("❌ Invalid UID or mention.");
+    }
 
- if(uid == 61567840496026) return message.reply("koto boro sahos tor😦");
- 
- const avatarUrl = `https://graph.facebook.com/${uid}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
- const userName = await usersData.getName(uid);
- let oo = `https://www.noobs-api.rf.gd/dipto/fbfakechat?name=${userName}&dp=${encodeURIComponent(avatarUrl)}&text=${userText}`
- const ci = event?.messageReply?.attachments[0]?.url;
- if(ci) oo += `&chatimg=${encodeURIComponent(ci)}`
- message.reply({
- attachment: await global.utils.getStreamFromURL(oo),
- });
- } catch(e){
- message.reply("who r u bby 🥺")
- console.log("fakechat error",e)
- }
- }
+    // Fetch user name from Facebook API
+    let name = "User";
+    try {
+      const userInfo = await api.getUserInfo(uid);
+      name = userInfo[uid]?.name || name;
+    } catch (e) {
+      // fallback to "User"
+    }
+
+    const mode = modeRaw.toLowerCase() === "dark" ? "dark" : "light";
+
+    // 💸 Check and deduct 50 coins
+    const balance = await usersData.get(event.senderID, "money") || 0;
+    if (balance < 50) return message.reply("❌ You need at least 50 coins to use this command.");
+    await usersData.set(event.senderID, { money: balance - 50 });
+
+    // Prepare API
+    const apiURL = `https://fchat-5pni.onrender.com/fakechat?uid=${encodeURIComponent(uid)}&name=${encodeURIComponent(name)}&text1=${encodeURIComponent(text1)}&text2=${encodeURIComponent(text2)}&mode=${mode}`;
+
+    const cachePath = path.join(__dirname, "tmp", `fchat_${event.senderID}.png`);
+    fs.ensureDirSync(path.dirname(cachePath));
+
+    const file = fs.createWriteStream(cachePath);
+    https.get(apiURL, res => {
+      res.pipe(file);
+      file.on("finish", () => {
+        file.close(() => {
+          message.reply({
+            body: `🎭 Fake Chat Created\n👤 Name: ${name}\n💬 Text1: ${text1}${text2 ? `\n💬 Text2: ${text2}` : ""}\n🎨 Mode: ${mode.toUpperCase()}\n💸 -50 coins`,
+            attachment: fs.createReadStream(cachePath)
+          }, () => fs.unlinkSync(cachePath));
+        });
+      });
+    }).on("error", err => {
+      fs.unlink(cachePath, () => {});
+      message.reply("❌ Failed to generate fake chat.");
+    });
+  }
 };
