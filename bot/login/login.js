@@ -4,23 +4,31 @@ process.on('uncaughtException', error => console.error(error));
 // Set bash title
 process.stdout.write("\x1b]2;Shipu AI - Made by Chitron Bhattacharjee\x1b\x5c");
 
+// Verify and require essential packages
+try {
+  var colors = require('colors');
+} catch (e) {
+  console.error("CRITICAL: 'colors' package missing. Run: npm install colors");
+  process.exit(1);
+}
+
 const fs = require("fs-extra");
 const path = require("path");
 const axios = require("axios");
 const readline = require("readline");
 const gradient = require("gradient-string");
-const colors = require("colors");
 const { promisify } = require("util");
 
-// Main login class
 class ShipuAiLogin {
   constructor() {
-    this.dirAccount = this.resolvePath(global.client?.dirAccount || "account.dev.txt");
+    this.dirAccount = path.resolve(process.cwd(), global.client?.dirAccount || "account.dev.txt");
     this.config = global.GoatBot?.config || {};
-    this.currentVersion = require("../../package.json").version;
+    this.currentVersion = require(path.resolve(process.cwd(), "package.json")).version;
     this.titles = this.getTitleArt();
+    
+    // Enhanced error handling for initialization
     this.init().catch(err => {
-      console.error("INIT ERROR:", err);
+      console.error(colors.red("[FATAL] INIT ERROR:"), err.stack || err);
       process.exit(1);
     });
   }
@@ -40,30 +48,27 @@ class ShipuAiLogin {
         "███████║██║",
         "██╔══██║██║",
         "██║  ██║██║",
-        "╚═╝  ╚═╝╚═╝"
+        "╚═╝  ╚═╝╚═╝",
+        "",
+        colors.gray("made by Chitron Bhattacharjee")
       ],
       [
         "Shipu",
         "  AI",
         "",
-        "made by Chitron Bhattacharjee"
+        colors.gray("made by Chitron Bhattacharjee")
       ],
       [
-        `Shipu AI @${this.currentVersion}`
+        `Shipu AI @${this.currentVersion}`,
+        "",
+        colors.gray("made by Chitron Bhattacharjee")
       ],
       [
-        "Shipu AI"
+        "Shipu AI",
+        "",
+        colors.gray("made by Chitron Bhattacharjee")
       ]
     ];
-  }
-
-  resolvePath(filePath, fallback = "") {
-    try {
-      return path.resolve(process.cwd(), filePath || fallback);
-    } catch (err) {
-      console.error("PATH ERROR:", err.message);
-      return path.resolve(process.cwd(), fallback);
-    }
   }
 
   async init() {
@@ -80,20 +85,22 @@ class ShipuAiLogin {
       console.log(gradient("#f5af19", "#f12711")(this.createLine(null, true)));
       console.log();
       
-      for (const text of titleSet) {
-        const textColor = text.includes("made by") 
-          ? gradient("#888888", "#AAAAAA")(text) 
-          : gradient("#FA8BFF", "#2BD2FF", "#2BFF88")(text);
-        this.centerText(textColor, text.length);
-      }
-      
-      const subTitle = `Shipu AI @${this.currentVersion} - Advanced AI Assistant`;
-      this.centerText(gradient("#9F98E8", "#AFF6CF")(subTitle), subTitle.length);
-      
-      const srcUrl = "https://raw.githubusercontent.com/ntkhang03/Goat-Bot-V2/main/package.json";
-      this.centerText(gradient("#9F98E8", "#AFF6CF")(srcUrl), srcUrl.length);
+      titleSet.forEach(line => {
+        if (line.includes("made by")) {
+          console.log(colors.gray(line));
+        } else {
+          const colored = gradient("#FA8BFF", "#2BD2FF", "#2BFF88")(line);
+          this.centerText(colored, line.length);
+        }
+      });
+
+      console.log();
+      this.centerText(gradient("#9F98E8", "#AFF6CF")(`Shipu AI v${this.currentVersion}`));
+      this.centerText(colors.blue("Advanced AI Assistant"));
+      this.centerText(colors.blue.underline("https://github.com/chitronb/shipu-ai"));
+      console.log();
     } catch (err) {
-      console.error("WELCOME ERROR:", err);
+      console.error(colors.red("[WELCOME ERROR]"), err);
     }
   }
 
@@ -105,41 +112,41 @@ class ShipuAiLogin {
   }
 
   centerText(text, length) {
-    const width = process.stdout.columns;
-    const leftPadding = Math.floor((width - (length || text.length)) / 2);
-    const rightPadding = width - leftPadding - (length || text.length);
-    const paddedString = ' '.repeat(Math.max(0, leftPadding)) + text + ' '.repeat(Math.max(0, rightPadding));
-    console.log(paddedString);
+    const width = process.stdout.columns || 80;
+    const padLength = Math.max(0, Math.floor((width - (length || text.length)) / 2);
+    console.log(' '.repeat(padLength) + text);
   }
 
   createLine(content, isMaxWidth = false) {
-    const width = isMaxWidth ? process.stdout.columns : Math.min(process.stdout.columns, 50);
-    if (!content) return '─'.repeat(width);
+    const width = isMaxWidth ? (process.stdout.columns || 80) : Math.min(process.stdout.columns || 80, 50);
+    if (!content) return colors.yellow('─'.repeat(width));
     
     content = ` ${content.trim()} `;
-    const lineLength = width - content.length;
-    const left = Math.floor(lineLength / 2);
-    return '─'.repeat(left) + content + '─'.repeat(lineLength - left);
+    const padLength = Math.floor((width - content.length) / 2);
+    return colors.yellow('─'.repeat(padLength) + content + '─'.repeat(width - content.length - padLength));
   }
 
   async checkVersion() {
     try {
-      const { data: { version } } = await axios.get(
+      const { data } = await axios.get(
         "https://raw.githubusercontent.com/ntkhang03/Goat-Bot-V2/main/package.json",
         { timeout: 5000 }
       );
       
-      if (this.compareVersion(version, this.currentVersion) === 1) {
-        console.log("Update available!");
+      if (this.compareVersion(data.version, this.currentVersion) > 0) {
+        console.log(colors.yellow(`Update available: v${this.currentVersion} → v${data.version}`));
+        console.log(colors.yellow("Run: npm update"));
       }
     } catch (err) {
-      console.warn("Version check failed:", err.message);
+      console.warn(colors.yellow("[VERSION CHECK]"), "Failed to check updates:", err.message);
     }
   }
 
   compareVersion(v1, v2) {
-    const parts1 = v1.split('.').map(Number);
-    const parts2 = v2.split('.').map(Number);
+    const parsePart = part => isNaN(part) ? part : parseInt(part);
+    const parts1 = v1.split('.').map(parsePart);
+    const parts2 = v2.split('.').map(parsePart);
+    
     for (let i = 0; i < 3; i++) {
       if (parts1[i] > parts2[i]) return 1;
       if (parts1[i] < parts2[i]) return -1;
@@ -148,17 +155,29 @@ class ShipuAiLogin {
   }
 
   async startBot() {
-    console.log(colors.hex("#f5ab00")(this.createLine("STARTING SHIPU AI", true)));
+    console.log(this.createLine("STARTING SHIPU AI", true));
     
     try {
-      // Bot startup logic here
-      console.log("Shipu AI initializing...");
+      // Load original bot login logic
+      const loginFile = path.resolve(__dirname, `login${process.env.NODE_ENV === 'development' ? '.dev' : ''}.js`);
+      if (!fs.existsSync(loginFile)) {
+        throw new Error(`Login file not found: ${loginFile}`);
+      }
+      
+      console.log(colors.green("Initializing..."));
+      require(loginFile);
+      
     } catch (err) {
-      console.error("STARTUP ERROR:", err);
+      console.error(colors.red("[STARTUP FAILED]"), err.stack || err);
       process.exit(1);
     }
   }
 }
 
-// Start the bot
-new ShipuAiLogin();
+// Start with enhanced error handling
+try {
+  new ShipuAiLogin();
+} catch (err) {
+  console.error(colors.red("[CRITICAL ERROR]"), err.stack || err);
+  process.exit(1);
+}
