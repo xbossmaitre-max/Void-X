@@ -36,11 +36,11 @@
   },
   "timeZone": "Asia/Dhaka",
   "credentials": {
-    "gmailAccount": {
-      "email": "romeobot555@gmail.com",
-      "clientId": "695328982889-v1t85ej9aq1fvv0n4alp7rcbea9gkgvf.apps.googleusercontent.com",
-      "clientSecret": "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",
-      "refreshToken": "AIzaSyBRDF9Ykn2g1qVtW7xYX-YY-tFsPXY1mPc",
+    "googleDrive": {
+      "email": "",
+      "clientId": "",
+      "clientSecret": "",
+      "refreshToken": "",
       "apiKey": ""
     },
     "gRecaptcha": {
