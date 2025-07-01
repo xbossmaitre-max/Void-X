@@ -17,7 +17,7 @@ module.exports = {
  config: {
  name: "flux",
  aliases: [],
- author: "Team Calyx",
+ author: "Chitron Bhattacharjee",
  version: "1.0",
  cooldowns: 5,
  role: 0,
@@ -30,7 +30,7 @@ module.exports = {
  },
  },
 
- onStart: async function({ message, globalData, args, api, event }) {
+ onStart: async function ({ message, globalData, args, api, event }) {
  api.setMessageReaction("⏳", event.messageID, () => {}, true);
 
  try {
@@ -56,6 +56,11 @@ module.exports = {
  return message.reply("❌ | Invalid model style. Choose 1, 2, or 3.");
  }
 
+ // 💸 Coin Cost Notice with anime emojis
+ message.reply(
+ "🌸 𝓣𝓱𝓲𝓼 𝓬𝓸𝓶𝓶𝓪𝓷𝓭 𝔀𝓲𝓵𝓵 𝓬𝓸𝓼𝓽 ❺×❹ = ❷⓿ 𝓬𝓸𝓲𝓷𝓼~\n💫 𝓘𝓽 𝔀𝓲𝓵𝓵 𝓫𝓮 𝓭𝓮𝓭𝓾𝓬𝓽𝓮𝓭 𝓯𝓻𝓸𝓶 𝔂𝓸𝓾𝓻 𝓫𝓪𝓵𝓪𝓷𝓬𝓮!"
+ );
+
  const apiUrl = await getApiUrl();
 
  const cacheFolderPath = path.join(__dirname, "/tmp");
@@ -64,7 +69,7 @@ module.exports = {
  const modelParam = Array(4).fill(styleMap[model]).join("/");
 
  const { data } = await axios.get(`${apiUrl}/api/flux`, {
- params: { prompt, model: modelParam }
+ params: { prompt, model: modelParam },
  });
 
  if (!data || !data.results || data.results.length < 4) {
@@ -72,17 +77,20 @@ module.exports = {
  return message.reply("❌ | API did not return enough images.");
  }
 
- const imageUrls = data.results.slice(0, 4).map(res => res.data[0].url);
+ const imageUrls = data.results.slice(0, 4).map((res) => res.data[0].url);
 
  const images = await Promise.all(
  imageUrls.map(async (imageURL, index) => {
- const imagePath = path.join(cacheFolderPath, `image_${index + 1}_${Date.now()}.jpg`);
+ const imagePath = path.join(
+ cacheFolderPath,
+ `image_${index + 1}_${Date.now()}.jpg`
+ );
  const writer = fs.createWriteStream(imagePath);
 
  const imageResponse = await axios({
  url: imageURL,
  method: "GET",
- responseType: "stream"
+ responseType: "stream",
  });
 
  imageResponse.data.pipe(writer);
@@ -96,7 +104,7 @@ module.exports = {
  })
  );
 
- const loadedImages = await Promise.all(images.map(img => loadImage(img)));
+ const loadedImages = await Promise.all(images.map((img) => loadImage(img)));
  const width = loadedImages[0].width;
  const height = loadedImages[0].height;
 
@@ -108,15 +116,18 @@ module.exports = {
  ctx.drawImage(loadedImages[2], 0, height, width, height);
  ctx.drawImage(loadedImages[3], width, height, width, height);
 
- const combinedImagePath = path.join(cacheFolderPath, `image_combined_${Date.now()}.jpg`);
+ const combinedImagePath = path.join(
+ cacheFolderPath,
+ `image_combined_${Date.now()}.jpg`
+ );
  const buffer = canvas.toBuffer("image/jpeg");
  fs.writeFileSync(combinedImagePath, buffer);
 
  api.setMessageReaction("✅", event.messageID, () => {}, true);
 
  const reply = await message.reply({
- body: `Select an image by replying with 1, 2, 3, or 4.`,
- attachment: fs.createReadStream(combinedImagePath)
+ body: `🖼️ Select an image by replying with 1, 2, 3, or 4.`,
+ attachment: fs.createReadStream(combinedImagePath),
  });
 
  const dataForReply = {
@@ -124,11 +135,10 @@ module.exports = {
  messageID: reply.messageID,
  images: images,
  combinedImage: combinedImagePath,
- author: event.senderID
+ author: event.senderID,
  };
 
  global.GoatBot.onReply.set(reply.messageID, dataForReply);
-
  } catch (error) {
  api.setMessageReaction("❌", event.messageID, () => {}, true);
  console.error("Error in flux command:", error.response ? error.response.data : error.message);
@@ -136,7 +146,7 @@ module.exports = {
  }
  },
 
- onReply: async function({ message, event }) {
+ onReply: async function ({ message, event }) {
  const replyData = global.GoatBot.onReply.get(event.messageReply.messageID);
 
  if (!replyData || replyData.author !== event.senderID) {
@@ -151,11 +161,11 @@ module.exports = {
 
  const selectedImagePath = replyData.images[index - 1];
  await message.reply({
- attachment: fs.createReadStream(selectedImagePath)
+ attachment: fs.createReadStream(selectedImagePath),
  });
  } catch (error) {
  console.error("Error in flux onReply:", error.message);
  message.reply("❌ | Failed to send selected image.");
  }
- }
+ },
 };
