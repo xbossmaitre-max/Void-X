@@ -21,16 +21,17 @@ module.exports = {
  version: "1.0",
  cooldowns: 5,
  role: 0,
- shortDescription: "Generate images with FLUX API (-m 1/2/3 for model style)",
- longDescription:
- "Generates 4 images based on a prompt and model style, combines them, and lets you select one.",
+ shortDescription: "Generate images with FLUX API (-m 1/2/3)",
+ longDescription: "Generates 4 images from a prompt & model, lets you choose one.",
  category: "𝗔𝗜 & 𝗚𝗣𝗧",
  guide: {
- en: "{pn} <prompt> [-m 1/2/3]\nModels:\n1: flux.1-schnell\n2: flux.1-dev\n3: flux.1-pro",
- },
+ en: "{pn} <prompt> [-m 1/2/3]"
+ }
  },
 
- onStart: async function ({ message, globalData, args, api, event }) {
+ onStart: async function ({ message, globalData, args, api, event, usersData }) {
+ const cost = 20;
+
  api.setMessageReaction("⏳", event.messageID, () => {}, true);
 
  try {
@@ -45,127 +46,93 @@ module.exports = {
  prompt += args[i] + " ";
  }
  }
+
  prompt = prompt.trim();
+ if (!prompt) return message.reply("❌ | Missing prompt.");
+ if (!styleMap[model]) return message.reply("❌ | Invalid model (1/2/3 only).");
 
- if (!prompt) {
- return message.reply("❌ | Missing required parameters: prompt");
- }
+ // 💸 Deduct coins
+ const userData = await usersData.get(event.senderID);
+ const balance = userData.money || 0;
+ if (balance < cost)
+ return message.reply(`❌ | You need at least ${cost} coins. Your balance: ${balance}`);
+ await usersData.set(event.senderID, { money: balance - cost });
 
- if (!styleMap[model]) {
- api.setMessageReaction("❌", event.messageID, () => {}, true);
- return message.reply("❌ | Invalid model style. Choose 1, 2, or 3.");
- }
-
- // 💸 Coin Cost Notice with anime emojis
- message.reply(
- "🌸 𝓣𝓱𝓲𝓼 𝓬𝓸𝓶𝓶𝓪𝓷𝓭 𝔀𝓲𝓵𝓵 𝓬𝓸𝓼𝓽 ❺×❹ = ❷⓿ 𝓬𝓸𝓲𝓷𝓼~\n💫 𝓘𝓽 𝔀𝓲𝓵𝓵 𝓫𝓮 𝓭𝓮𝓭𝓾𝓬𝓽𝓮𝓭 𝓯𝓻𝓸𝓶 𝔂𝓸𝓾𝓻 𝓫𝓪𝓵𝓪𝓷𝓬𝓮!"
- );
+ message.reply("💸 𝓣𝓱𝓲𝓼 𝓬𝓸𝓼𝓽 ❷⓿ 𝓬𝓸𝓲𝓷𝓼. 𝓖𝓮𝓷𝓮𝓻𝓪𝓽𝓲𝓷𝓰 𝓲𝓶𝓪𝓰𝓮𝓼...");
 
  const apiUrl = await getApiUrl();
-
- const cacheFolderPath = path.join(__dirname, "/tmp");
- if (!fs.existsSync(cacheFolderPath)) fs.mkdirSync(cacheFolderPath);
-
  const modelParam = Array(4).fill(styleMap[model]).join("/");
+ const { data } = await axios.get(`${apiUrl}/api/flux`, { params: { prompt, model: modelParam } });
 
- const { data } = await axios.get(`${apiUrl}/api/flux`, {
- params: { prompt, model: modelParam },
+ if (!data?.results || data.results.length < 4)
+ return message.reply("❌ | Not enough images returned from API.");
+
+ const cachePath = path.join(__dirname, "tmp");
+ if (!fs.existsSync(cachePath)) fs.mkdirSync(cachePath);
+
+ const images = await Promise.all(data.results.slice(0, 4).map(async (res, index) => {
+ const url = res.data[0].url;
+ const filePath = path.join(cachePath, `img_${Date.now()}_${index}.jpg`);
+ const response = await axios({ url, method: "GET", responseType: "stream" });
+ const writer = fs.createWriteStream(filePath);
+ response.data.pipe(writer);
+ await new Promise((res, rej) => {
+ writer.on("finish", res);
+ writer.on("error", rej);
  });
+ return filePath;
+ }));
 
- if (!data || !data.results || data.results.length < 4) {
- api.setMessageReaction("❌", event.messageID, () => {}, true);
- return message.reply("❌ | API did not return enough images.");
- }
-
- const imageUrls = data.results.slice(0, 4).map((res) => res.data[0].url);
-
- const images = await Promise.all(
- imageUrls.map(async (imageURL, index) => {
- const imagePath = path.join(
- cacheFolderPath,
- `image_${index + 1}_${Date.now()}.jpg`
- );
- const writer = fs.createWriteStream(imagePath);
-
- const imageResponse = await axios({
- url: imageURL,
- method: "GET",
- responseType: "stream",
- });
-
- imageResponse.data.pipe(writer);
-
- await new Promise((resolve, reject) => {
- writer.on("finish", resolve);
- writer.on("error", reject);
- });
-
- return imagePath;
- })
- );
-
- const loadedImages = await Promise.all(images.map((img) => loadImage(img)));
- const width = loadedImages[0].width;
- const height = loadedImages[0].height;
-
+ const loaded = await Promise.all(images.map(img => loadImage(img)));
+ const width = loaded[0].width;
+ const height = loaded[0].height;
  const canvas = createCanvas(width * 2, height * 2);
  const ctx = canvas.getContext("2d");
 
- ctx.drawImage(loadedImages[0], 0, 0, width, height);
- ctx.drawImage(loadedImages[1], width, 0, width, height);
- ctx.drawImage(loadedImages[2], 0, height, width, height);
- ctx.drawImage(loadedImages[3], width, height, width, height);
+ ctx.drawImage(loaded[0], 0, 0, width, height);
+ ctx.drawImage(loaded[1], width, 0, width, height);
+ ctx.drawImage(loaded[2], 0, height, width, height);
+ ctx.drawImage(loaded[3], width, height, width, height);
 
- const combinedImagePath = path.join(
- cacheFolderPath,
- `image_combined_${Date.now()}.jpg`
- );
- const buffer = canvas.toBuffer("image/jpeg");
- fs.writeFileSync(combinedImagePath, buffer);
+ const combined = path.join(cachePath, `combined_${Date.now()}.jpg`);
+ fs.writeFileSync(combined, canvas.toBuffer("image/jpeg"));
 
  api.setMessageReaction("✅", event.messageID, () => {}, true);
 
  const reply = await message.reply({
- body: `🖼️ Select an image by replying with 1, 2, 3, or 4.`,
- attachment: fs.createReadStream(combinedImagePath),
+ body: `Select an image by replying with 1, 2, 3, or 4.`,
+ attachment: fs.createReadStream(combined)
  });
 
- const dataForReply = {
+ global.GoatBot.onReply.set(reply.messageID, {
  commandName: this.config.name,
  messageID: reply.messageID,
- images: images,
- combinedImage: combinedImagePath,
- author: event.senderID,
- };
+ images,
+ combinedImage: combined,
+ author: event.senderID
+ });
 
- global.GoatBot.onReply.set(reply.messageID, dataForReply);
- } catch (error) {
+ } catch (err) {
+ console.error("Flux error:", err);
  api.setMessageReaction("❌", event.messageID, () => {}, true);
- console.error("Error in flux command:", error.response ? error.response.data : error.message);
- message.reply("❌ | Failed to generate images.");
+ message.reply("❌ | Image generation failed.");
  }
  },
 
  onReply: async function ({ message, event }) {
- const replyData = global.GoatBot.onReply.get(event.messageReply.messageID);
+ const data = global.GoatBot.onReply.get(event.messageReply.messageID);
+ if (!data || data.author !== event.senderID) return;
 
- if (!replyData || replyData.author !== event.senderID) {
- return;
- }
+ const num = parseInt(event.body.trim());
+ if (isNaN(num) || num < 1 || num > 4)
+ return message.reply("❌ | Reply with 1, 2, 3, or 4 only.");
 
  try {
- const index = parseInt(event.body.trim());
- if (isNaN(index) || index < 1 || index > 4) {
- return message.reply("❌ | Invalid selection. Please reply with a number between 1 and 4.");
- }
-
- const selectedImagePath = replyData.images[index - 1];
- await message.reply({
- attachment: fs.createReadStream(selectedImagePath),
- });
- } catch (error) {
- console.error("Error in flux onReply:", error.message);
+ const imgPath = data.images[num - 1];
+ message.reply({ attachment: fs.createReadStream(imgPath) });
+ } catch (err) {
+ console.error("flux onReply error:", err);
  message.reply("❌ | Failed to send selected image.");
  }
- },
+ }
 };
