@@ -6,7 +6,7 @@ module.exports = {
  config: {
  name: "gen",
  aliases: [],
- author: "Mahi--",
+ author: "Chitron Bhattacharjee",
  version: "1.0",
  cooldowns: 20,
  role: 0,
@@ -15,43 +15,47 @@ module.exports = {
  category: "𝗔𝗜 & 𝗚𝗣𝗧",
  guide: "{p}gen <prompt>",
  },
- onStart: async function ({ message, args, api, event }) {
- // Obfuscated author name check
- const obfuscatedAuthor = String.fromCharCode(77, 97, 104, 105, 45, 45);
- if (this.config.author !== obfuscatedAuthor) {
- return api.sendMessage("You are not authorized to change the author name.", event.threadID, event.messageID);
- }
 
+ onStart: async function ({ message, args, api, event }) {
  const prompt = args.join(" ");
 
  if (!prompt) {
- return api.sendMessage("🦆 | You need to provide a prompt.", event.threadID);
+ return api.sendMessage(
+ "🦆 | You need to provide a prompt.\nExample:\n+gen A duck flying over a volcano",
+ event.threadID
+ );
  }
 
- api.sendMessage("Please w8 your picture 🦆", event.threadID, event.messageID);
+ // 💸 Coin cost anime notice
+ message.reply(
+ "🌸 𝓣𝓱𝓲𝓼 𝓬𝓸𝓶𝓶𝓪𝓷𝓭 𝔀𝓲𝓵𝓵 𝓬𝓸𝓼𝓽 ❺ 𝓬𝓸𝓲𝓷𝓼~\n💫 𝓘𝓽 𝔀𝓲𝓵𝓵 𝓫𝓮 𝓭𝓮𝓭𝓾𝓬𝓽𝓮𝓭 𝓯𝓻𝓸𝓶 𝔂𝓸𝓾𝓻 𝓫𝓪𝓵𝓪𝓷𝓬𝓮!"
+ );
+
+ api.sendMessage("⏳ | Please wait while I generate your image...", event.threadID, event.messageID);
 
  try {
  const mrgenApiUrl = `https://hopelessmahi.onrender.com/api/image?prompt=${encodeURIComponent(prompt)}`;
 
  const mrgenResponse = await axios.get(mrgenApiUrl, {
- responseType: "arraybuffer"
+ responseType: "arraybuffer",
  });
 
  const cacheFolderPath = path.join(__dirname, "cache");
  if (!fs.existsSync(cacheFolderPath)) {
  fs.mkdirSync(cacheFolderPath);
  }
+
  const imagePath = path.join(cacheFolderPath, `${Date.now()}_generated_image.png`);
  fs.writeFileSync(imagePath, Buffer.from(mrgenResponse.data, "binary"));
 
  const stream = fs.createReadStream(imagePath);
  message.reply({
- body: "",
- attachment: stream
+ body: `🖼️ 𝓗𝓮𝓻𝓮 𝓲𝓼 𝔂𝓸𝓾𝓻 𝓰𝓮𝓷𝓮𝓻𝓪𝓽𝓮𝓭 𝓲𝓶𝓪𝓰𝓮!`,
+ attachment: stream,
  });
  } catch (error) {
  console.error("Error:", error);
- message.reply("🦆 | An error occurred. Please try again later.");
+ message.reply("❌ | An error occurred. Please try again later.");
  }
  }
 };
