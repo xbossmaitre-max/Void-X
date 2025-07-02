@@ -5,7 +5,7 @@ module.exports = {
 	config: {
 		name: "antichangeinfo",
 		version: "1.8",
-		author: "NTKhang",
+		author: "Chitron Bhattacharjee",
 		countDown: 5,
 		role: 0,
 		shortDescription: {
