@@ -9,7 +9,7 @@ module.exports = {
  config: {
  name: "say",
  version: "1.7",
- author: "MahMUD",
+ author: "Chitron Bhattacharjee",
  countDown: 5,
  role: 0,
  category: "media",
