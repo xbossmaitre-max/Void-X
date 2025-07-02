@@ -4,7 +4,7 @@ module.exports = {
     name: "leaveall",
 aliases: ["outall"],
     version: "1.0",
-    author: "otineeey",
+    author: "Chitron Bhattacharjee",
     countDown: 5,
     role: 2,
     shortDescription: {
