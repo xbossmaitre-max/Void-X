@@ -6,7 +6,7 @@ module.exports = {
  config: {
  name: "draft",
  version: "2.0.2",
- author: "Shipu Ai",
+ author: "Chitron Bhattacharjee",
  countDown: 5,
  role: 2, // Admin-only
  shortDescription: {
