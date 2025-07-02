@@ -10,7 +10,7 @@ config:{
  name: "meta",
  aliases: ["img5"],
  version: "6.9.0",
- author: "dipto",
+ author: "Chitron Bhattacharjee",
  countDown: 15,
  role: 0,
  shortDescription: "photo genarate",
