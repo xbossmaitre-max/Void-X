@@ -26,7 +26,7 @@ module.exports = {
  name: "gcimg",
  aliases: ["gcimage", "grpimage"],
  version: "1.0",
- author: "Dipto",
+ author: "Chitron Bhattacharjee",
  countDown: 5,
  role: 0,
  description: "𝗚𝗲𝘁 𝗚𝗿𝗼𝘂𝗽 𝗜𝗺𝗮𝗴𝗲",
