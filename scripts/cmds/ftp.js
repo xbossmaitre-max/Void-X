@@ -81,7 +81,7 @@ module.exports = {
  } catch (e) {
  // folder exists, ignore
  }
- await client.cd("store");
+ await client.cd("lume/store");
 
  await client.uploadFrom(tempPath, filename);
  await client.close();
