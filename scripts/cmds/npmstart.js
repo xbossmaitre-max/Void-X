@@ -5,7 +5,7 @@ module.exports = {
  config: {
  name: "npmstart",
  version: "1.0",
- author: "ShiPu",
+ author: "Chitron Bhattacharjee",
  role: 2, // ADMIN ONLY
  description: "Execute npm start command",
  category: "admin",
