@@ -9,7 +9,7 @@ const baseApiUrl = async () => {
 (module.exports.config = {
  name: "imgur",
  version: "6.9",
- author: "dipto",
+ author: "Chitron Bhattacharjee",
  countDown: 5,
  role: 0,
  category: "media",
