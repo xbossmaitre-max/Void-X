@@ -4,7 +4,7 @@ const axios = require('axios');
 module.exports = {
     config: {
       name: "karma",
-      author: "August Quinn/kira",
+      author: "Chitron Bhattacharjee",
       version: "69",
       cooldowns: 5,
       role: 0,
