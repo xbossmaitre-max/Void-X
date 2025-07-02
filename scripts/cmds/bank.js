@@ -13,7 +13,7 @@ module.exports = {
  category: "𝗪𝗔𝗟𝗟𝗘𝗧",
  countDown: 15,
  role: 0,
- author: "Loufi | SiAM | Samuel\n\nModified: Shikaki"
+ author: "Chitron Bhattacharjee"
  },
  onStart: async function ({ args, message, event, api, usersData }) {
  const { getPrefix } = global.utils;
