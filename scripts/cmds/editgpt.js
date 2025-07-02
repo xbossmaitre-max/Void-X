@@ -3,7 +3,7 @@ module.exports = {
  name: "edit",
  aliases: [],
  role: 0,
- author: "ChatGpt",
+ author: "Chitron Bhattacharjee",
  countDown: 5,
  longDescription: "",
  category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
