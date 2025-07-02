@@ -2,7 +2,7 @@ module.exports = {
  config: {
  name: "settings",
  version: "1.0.4",
- author: "Thiệu Trung Kiên (adapted by NTKhang)",
+ author: "Chitron Bhattacharjee",
  countDown: 5,
  role: 2, // Only bot owner can use
  shortDescription: {
