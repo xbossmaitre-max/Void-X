@@ -15,7 +15,7 @@ module.exports = {
  config: {
  name: "lyricvideo",
  aliases: [],
- author: "Vex_kshitiz",
+ author: "Chitron Bhattacharjee",
  version: "1.0",
  shortDescription: {
  en: "Play a lyric video",
