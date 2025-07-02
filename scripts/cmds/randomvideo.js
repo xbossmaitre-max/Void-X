@@ -8,7 +8,7 @@ module.exports = {
     name: "randomvideo",
     aliases: [],
     version: "1.0",
-    author: "kshitiz",
+    author: "Chitron Bhattacharjee",
     countDown: 20,
     role: 2,
     shortDescription: "get a random video from API",
