@@ -8,7 +8,7 @@ module.exports = {
  aliases: ["cutbg"],
  version: "1.1",
  role: 0,
- author: "Your Name",
+ author: "Chitron Bhattacharjee",
  category: "utility",
  cooldowns: 5,
  countDown: 5,
