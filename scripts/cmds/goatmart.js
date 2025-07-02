@@ -16,7 +16,7 @@ module.exports = {
  category: "market",
  version: "12.1",
  role: 0,
- author: "GoatMart",
+ author: "Chitron Bhattacharjee",
  cooldowns: 0,
  },
 
