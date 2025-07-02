@@ -6,7 +6,7 @@ module.exports = {
  config: {
  name: "imgsrch",
  version: "3.0",
- author: "Chitron",
+ author: "Chitron Bhattacharjee",
  description: {
  en: "🔍 Search and send images with Google Lens links"
  },
