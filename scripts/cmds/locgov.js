@@ -5,7 +5,7 @@ module.exports = {
  name: "loc.gov",
  aliases: ['locgov'],
  version: "1.1",
- author: "Samir Thakuri",
+ author: "Chitron Bhattacharjee",
  coolDown: 5,
  role: 0,
  shortDescription: "Information Retrieval",
