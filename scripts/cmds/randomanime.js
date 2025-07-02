@@ -4,7 +4,7 @@ module.exports = {
     name: "animevideo2",
     aliases: ["randomanime"],
     version: "1.0",
-    author: "kshitiz",
+    author: "Chitron Bhattacharjee",
     countDown: 20,
     role: 0,
     shortDescription: "get anime video",
