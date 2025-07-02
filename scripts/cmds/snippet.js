@@ -12,7 +12,7 @@ module.exports.config = {
  version: '1.0',
  role: 0,
  countDowns: 5,
- author: 'dipto',
+ author: "Chitron Bhattacharjee",
  description: 'This command transforms text image',
  category: 'command',
  guide: { en: '[code] []' }
