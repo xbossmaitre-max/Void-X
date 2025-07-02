@@ -14,13 +14,13 @@ const FTP_CONFIG = {
 module.exports = {
   config: {
     name: "ftp",
-    version: "2.3",
+    version: "2.2",
     author: "Chitron Bhattacharjee",
     countDown: 5,
     role: 2,
     shortDescription: { en: "✨ Upload, list, delete FTP files" },
     description: {
-      en: "🌸 Upload .js/.txt/.html/etc to your FTP server (`htdocs/lume/store`) — anime style~"
+      en: "🌸 Upload .js/.txt/.html/etc to your FTP server (htdocs/store) — anime style~"
     },
     category: "tools",
     guide: {
@@ -48,21 +48,15 @@ module.exports = {
   }
 };
 
-// 📁 Ensure path exists (mkdir + cd)
-async function ensurePath(client, dirs = []) {
-  for (const dir of dirs) {
-    try {
-      await client.send(`MKD ${dir}`);
-    } catch {}
-    await client.cd(dir);
-  }
-}
-
-// 🌸 Main logic
 async function handleFtp(message, args) {
   const subCmd = args[0];
 
-  if (subCmd === "list") return await listFiles(message);
+  // === 🧾 List Files ===
+  if (subCmd === "list") {
+    return await listFiles(message);
+  }
+
+  // === 🗑 Delete File ===
   if (subCmd === "delete") {
     const filename = args[1];
     if (!filename)
@@ -70,6 +64,7 @@ async function handleFtp(message, args) {
     return await deleteFile(message, filename);
   }
 
+  // === 📤 Upload File ===
   const [filename, ...rest] = args;
   if (!filename || !/\.(js|php|html|txt|py|json)$/i.test(filename)) {
     return message.reply("🚫 | 𝒱𝒶𝓁𝒾𝒹 𝒻𝒾𝓁𝑒𝓃𝒶𝓂𝑒 𝓇𝑒𝓆𝓊𝒾𝓇𝑒𝒹 (.js, .php...)");
@@ -89,42 +84,43 @@ async function handleFtp(message, args) {
   }
 
   const tempPath = path.join(__dirname, "cache", filename);
-  try {
-    await fs.ensureDir(path.dirname(tempPath));
-    await fs.writeFile(tempPath, code);
-  } catch (err) {
-    return message.reply("🚫 | 𝒞𝒶𝓃'𝓉 𝓌𝓇𝒾𝓉𝑒 𝓉𝑜 𝓉𝑒𝓂𝓅 𝒻𝒾𝓁𝑒 💢");
-  }
+  await fs.ensureDir(path.dirname(tempPath));
+  await fs.writeFile(tempPath, code);
 
   const client = new ftp.Client();
   try {
     await client.access(FTP_CONFIG);
-    await ensurePath(client, ["htdocs", "lume", "store"]);
+    await client.cd("htdocs");
+    try {
+      await client.send("MKD store");
+    } catch {}
+    await client.cd("store");
+
     await client.uploadFrom(tempPath, filename);
     await client.close();
 
     return message.reply(
       `✅ | 𝒰𝓅𝓁𝑜𝒶𝒹𝑒𝒹 ✨ \`${filename}\`\n` +
-      `📁 𝓉𝑜 \`htdocs/lume/store\`\n🌸 𝒴𝒶𝓎~ 𝒾𝓉'𝓈 𝓈𝒶𝒻𝑒 & 𝓈𝓉𝓎𝓁𝒾𝓈𝒽!`
+      `📁 𝓉𝑜 \`htdocs/store\`\n🌸 𝒴𝒶𝓎~ 𝒾𝓉'𝓈 𝓈𝒶𝒻𝑒 & 𝓈𝓉𝓎𝓁𝒾𝓈𝒽!`
     );
   } catch (err) {
-    return message.reply(`❌ | 𝒰𝓅𝓁𝑜𝒶𝒹 𝒻𝒶𝒾𝓁𝑒𝒹 💔\n🛠 𝑅𝑒𝒶𝓈𝑜𝓃: ${err.message}`);
+    return message.reply(
+      `❌ | 𝒰𝓅𝓁𝑜𝒶𝒹 𝒻𝒶𝒾𝓁𝑒𝒹 💔\n🛠 𝑅𝑒𝒶𝓈𝑜𝓃: ${err.message}`
+    );
   } finally {
     client.close();
     await fs.remove(tempPath);
   }
 }
 
-// 📄 List Files
+// === 📄 List Files ===
 async function listFiles(message) {
   const client = new ftp.Client();
   try {
     await client.access(FTP_CONFIG);
-    await client.cd("htdocs");
-    await client.cd("lume");
-    await client.cd("store");
-
+    await client.cd("htdocs/store");
     const files = await client.list();
+
     if (!files.length)
       return message.reply("📭 | 𝒩𝑜 𝒻𝒾𝓁𝑒𝓈 𝒻𝑜𝓊𝓃𝒹 𝓉𝒽𝑒𝓇𝑒 😥");
 
@@ -142,15 +138,15 @@ async function listFiles(message) {
   }
 }
 
-// 🗑 Delete File
+// === 🗑 Delete File ===
 async function deleteFile(message, filename) {
   const client = new ftp.Client();
   try {
     await client.access(FTP_CONFIG);
-    await client.remove(`htdocs/lume/store/${filename}`);
+    await client.remove(`htdocs/store/${filename}`);
 
     return message.reply(
-      `🗑️ | 𝒟𝑒𝓁𝑒𝓉𝑒𝒹 \`${filename}\`\n💨 𝒻𝓇𝑜𝓂 \`htdocs/lume/store\`\n😌 𝒢𝑜𝓃𝑒 𝓁𝒾𝓀𝑒 𝓉𝒽𝑒 𝓌𝒾𝓃𝒹~`
+      `🗑️ | 𝒟𝑒𝓁𝑒𝓉𝑒𝒹 \`${filename}\`\n💨 𝒻𝓇𝑜𝓂 \`htdocs/store\`\n😌 𝒢𝑜𝓃𝑒 𝓁𝒾𝓀𝑒 𝓉𝒽𝑒 𝓌𝒾𝓃𝒹~`
     );
   } catch (err) {
     return message.reply(
@@ -159,4 +155,4 @@ async function deleteFile(message, filename) {
   } finally {
     client.close();
   }
-}
+    }
