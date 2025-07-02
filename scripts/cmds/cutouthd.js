@@ -7,7 +7,7 @@ module.exports = {
  aliases: ["enhance", "hdphoto"],
  version: "1.0",
  role: 0,
- author: "Your Name",
+ author: "Chitron Bhattacharjee",
  category: "image",
  cooldowns: 10,
  shortDescription: {
