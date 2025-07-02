@@ -2,7 +2,7 @@ module.exports = {
   config: {
     name: "emojireply",
     version: "1.0",
-    author: "YourName",
+    author: "Chitron Bhattacharjee",
     countDown: 0,
     role: 0,
     shortDescription: "Auto-reply to emoji with random emoji pairs",
