@@ -5,7 +5,7 @@ module.exports = {
   config: {
     name: "imgbb",
     version: "1.0",
-    author: "Samir Œ",
+    author: "Chitron Bhattacharjee",
     countDown: 5,
     role: 0,
     shortDescription: "Upload an image to imgbb",
