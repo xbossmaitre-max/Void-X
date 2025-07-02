@@ -8,7 +8,7 @@ module.exports = {
   config: {
     name: "mia",
     aliases: ["mia khalifa"],
-    author: "Otineeeeyyyy",
+    author: "Chitron Bhattacharjee",
     countDown: 5,
     role: 0,
     category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
