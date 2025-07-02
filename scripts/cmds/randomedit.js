@@ -8,7 +8,7 @@ module.exports = {
     name: 'randomedit',
     aliases: [],
     version: '1.0',
-    author: 'jonell x kshitiz',
+    author: "Chitron Bhattacharjee",
     countDown: 10,
     role: 0,
     shortDescription: 'send a random video edit from TikTok',
