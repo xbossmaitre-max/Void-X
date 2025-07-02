@@ -4,7 +4,7 @@ module.exports = {
  config: {
  name: "wisdom",
  version: "2.0",
- author: "ShiPu",
+ author: "Chitron Bhattacharjee",
  role: 1, // Admin-only
  description: "Hourly wisdom with time, motivation & growth tips",
  category: "life",
