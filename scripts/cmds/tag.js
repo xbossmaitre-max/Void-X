@@ -5,7 +5,7 @@ module.exports = {
  version: "2.1",
  category: '𝗧𝗔𝗚',
  role: 0,
- author: 'Chitron Bhattacharjee',
+ author: "Chitron Bhattacharjee",
  countDown: 3,
  description: {
  en: '𝗧𝗮𝗴𝘀 𝗮 𝘂𝘀𝗲𝗿, 𝗮𝗹𝗹, 𝗮𝗱𝗺𝗶𝗻𝘀 𝗼𝗿 𝗰𝗵𝗶𝘁𝗿𝗼𝗻-𝗹𝗶𝗸𝗲 𝗻𝗮𝗺𝗲𝘀 𝘄𝗶𝘁𝗵 𝘀𝘁𝘆𝗹𝗲.'
