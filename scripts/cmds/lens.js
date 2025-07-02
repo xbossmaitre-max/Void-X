@@ -6,7 +6,7 @@ module.exports = {
  config: {
  name: "lens",
  version: "1.0",
- author: "Chitron", // Modified from your concept
+ author: "Chitron Bhattacharjee", // Modified from your concept
  description: "Generate Google Lens search links",
  category: "utility",
  guide: {
