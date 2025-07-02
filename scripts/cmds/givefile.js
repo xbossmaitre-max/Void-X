@@ -5,7 +5,7 @@ module.exports = {
  name: "givefile",
  aliases: ["file"],
  version: "1.0",
- author: "FAHAD",
+ author: "Chitron Bhattacharjee",
  countDown: 5,
  role: 0,
  description: "extract file",
