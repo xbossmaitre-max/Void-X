@@ -4,7 +4,7 @@ module.exports = {
   config: {
     name: "art2",
     version: "1.0",
-    author: "Tashrif",
+    author: "Chitron Bhattacharjee",
     countDown: 10,
     role: 0,
     shortDescription: {
