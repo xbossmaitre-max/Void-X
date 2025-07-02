@@ -2,7 +2,7 @@ module.exports = {
  config: {
  name: "bet",
  version: "1.3",
- author: "Your Name",
+ author: "Chitron Bhattacharjee",
  countDown: 5,
  role: 0,
  category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
