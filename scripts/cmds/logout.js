@@ -2,7 +2,7 @@ module.exports = {
  config: {
  name: "logout",
  version: "1.0",
- author: "Samir",
+ author: "Chitron Bhattacharjee",
  countDown: 45,
  role: 0,
  shortDescription: "Logout Bot's Account",
