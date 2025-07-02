@@ -4,7 +4,7 @@ module.exports = {
  config: {
  name: "memberlist",
  version: "1.0",
- author: "Samuel Kâñèñgeè",
+ author: "Chitron Bhattacharjee",
  countDown: 5,
  role: 0,
  shortDescription: "MemberList",
