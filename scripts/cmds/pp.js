@@ -3,7 +3,7 @@ module.exports = {
  name: "profile",
  aliases: ["pfp", "pp"],
  version: "1.1",
- author: "dipto",
+ author: "Chitron Bhattacharjee",
  countDown: 5,
  role: 0,
  description: "PROFILE image",
