@@ -2,7 +2,7 @@ module.exports = {
  config: {
  name: "rps",
  version: "1.0",
- author: "Loid",
+ author: "Chitron Bhattacharjee",
  shortDescription: "Play rock-paper-scissors game with the bot.",
  category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
  guide: "{prefix}rps <rock|paper|scissors>"
