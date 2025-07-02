@@ -3,7 +3,7 @@ config: {
 		name: "newbox",
  aliases: ["newgc", "createbox"],
  version: "1.0",
-		author: "Samir",
+		author: "Chitron Bhattacharjee",
 		countDown: 5,
 		role: 2,
 		shortDescription: "Create a new chat group with the tag",
