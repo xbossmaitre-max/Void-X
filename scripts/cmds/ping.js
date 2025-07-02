@@ -2,7 +2,7 @@ module.exports = {
  config: {
  name: "ping",
  aliases: ["running"],
- author: "FAHAD",
+ author: "Chitron Bhattacharjee",
  version: 1.1,
  role: 0,
  shortDescription: {
