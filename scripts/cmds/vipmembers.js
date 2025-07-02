@@ -9,7 +9,7 @@ module.exports = {
  config: {
  name: "vip",
  version: "1.0",
- author: "Kshitiz",
+ author: "Chitron Bhattacharjee",
  countDown: 5,
  role: 0,
  shortDescription: {
