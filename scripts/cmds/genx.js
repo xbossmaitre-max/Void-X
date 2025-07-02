@@ -7,7 +7,7 @@ module.exports = {
  name: "genx",
  aliases: [],
  version: "1.0",
- author: "Vex_Kshitiz",
+ author: "Chitron Bhattacharjee",
  countDown: 50,
  role: 0,
  longDescription: {
