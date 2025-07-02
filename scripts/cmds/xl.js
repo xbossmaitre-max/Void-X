@@ -6,7 +6,7 @@ module.exports = {
  config: {
  name: 'xl',
  version: '1.0',
- author: 'Chitron Bhattacharjee',
+ author: "Chitron Bhattacharjee",
  countDown: 10,
  role: 0,
  longDescription: {
