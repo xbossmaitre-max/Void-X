@@ -4,7 +4,7 @@ const { existsSync, mkdirSync } = require("fs-extra");
 module.exports = {
  config: {
  name: "ship",
- author: "Otineeeeeyyyyyyy",
+ author: "Chitron Bhattacharjee",
  countDown: 5,
  role: 0,
  category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘" ,
