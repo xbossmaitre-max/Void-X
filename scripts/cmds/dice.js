@@ -4,7 +4,7 @@ module.exports = {
  name: "dice",
  aliases: [],
  version: "1.0",
- author: "kshitiz",
+ author: "Chitron Bhattacharjee",
  countDown: 5,
  role: 0,
  shortDescription: "have fun",
