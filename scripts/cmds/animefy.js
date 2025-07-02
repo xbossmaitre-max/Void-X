@@ -6,7 +6,7 @@ module.exports = {
     name: "animefy",
     aliases: [],
     version: "1.0",
-    author: "kshitiz",
+    author: "Chitron Bhattacharjee",
     countDown: 2,
     role: 0,
     shortDescription: "convert pic into anime style",
