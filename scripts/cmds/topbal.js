@@ -2,7 +2,7 @@ module.exports = {
  config: {
  name: "topbal",
  version: "1.0",
- author: "Samir",
+ author: "Chitron Bhattacharjee",
  role: 0,
  shortDescription: {
  en: "Top 10 Richest users"
