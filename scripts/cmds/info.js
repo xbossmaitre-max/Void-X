@@ -6,7 +6,7 @@ module.exports = {
 		name: "info",
  aliases: ["owner", "botinfo" ],
 		version: "1.0",
-		author: "NTKhang",
+		author: "Chitron Bhattacharjee",
 		countDown: 20,
 		role: 0,
 		shortDescription: { vi: "", en: "" },
