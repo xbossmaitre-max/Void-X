@@ -5,7 +5,7 @@ module.exports = {
  config: {
  name: "wanted",
  version: "1.0",
- author: "𝐀𝐒𝐈𝐅 𝐱𝟔𝟗",
+ author: "Chitron Bhattacharjee",
  countDown: 1,
  role: 0,
  shortDescription: "Wanted!",
