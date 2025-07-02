@@ -4,7 +4,7 @@ module.exports = {
     name: "lyricalvideo",
     aliases: ["lyricseditvibe", "lyricsvideo", "lyricaledit"],
     version: "1.0",
-    author: "kshitiz",
+    author: "Chitron Bhattacharjee",
     countDown: 20,
     role: 0,
     shortDescription: "get lyrical video",
