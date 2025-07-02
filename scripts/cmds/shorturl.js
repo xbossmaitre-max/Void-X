@@ -2,7 +2,7 @@ module.exports = {
   config: {
     name: "shorturl",
     version: "1.0",
-    author: "Mahir",
+    author: "Chitron Bhattacharjee",
     role: 0,
     shortDescription: {
       en: "Shorten a URL using TinyUtils",
