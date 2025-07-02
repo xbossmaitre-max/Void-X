@@ -40,7 +40,7 @@ module.exports = {
  name: "vid",
  aliases: ["videoDownload2"],
  version: "1.0",
- author: "‎Nazrul + Edited by ChatGPT",
+ author: "Chitron Bhattacharjee",
  countDown: 5,
  role: 0,
  shortDescription: "Download a video from YouTube",
