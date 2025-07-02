@@ -4,7 +4,7 @@ module.exports = {
 	config: {
 		name: "gc",
 		version: "1.5",
-		author: "NTKhang",
+		author: "Chitron Bhattacharjee",
 		countDown: 5,
 		role: 0,
 		description: {
