@@ -2,7 +2,7 @@ module.exports = {
  config: {
  name: "top",
  version: "1.4",
- author: "FAHAD",
+ author: "Chitron Bhattacharjee",
  role: 0,
  shortDescription: {
  en: "Top 15 Rich Users"
