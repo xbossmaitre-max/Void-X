@@ -4,7 +4,7 @@ module.exports = {
  config: {
  name: "health",
  version: "2.0",
- author: "ShiPu",
+ author: "Chitron Bhattacharjee",
  role: 0,
  description: "System health check with beautiful output",
  category: "utility",
