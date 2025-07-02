@@ -4,7 +4,7 @@ module.exports = {
  config: {
  name: "botsearch",
  version: "1.0",
- author: "Chitron",
+ author: "Chitron Bhattacharjee",
  description: "🔍 Search using Google Custom Search",
  category: "utility",
  guide: {
