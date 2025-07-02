@@ -2,7 +2,7 @@ module.exports = {
  config: {
  name: "supportgc",
  version: "1.0",
- author: "SiAM",
+ author: "Chitron Bhattacharjee",
  countDown: 30,
  role: 0,
  shortDescription: {
