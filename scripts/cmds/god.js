@@ -6,7 +6,7 @@ module.exports = {
 		name: "god",
  aliases: ['author'],
 		version: "1.5",
-		author: "NTKhang",
+		author: "Chitron Bhattacharjee",
 		countDown: 5,
 		role: 0,
 		shortDescription: {
