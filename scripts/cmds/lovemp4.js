@@ -2,7 +2,7 @@ module.exports = {
  config: {
  name: "love",
  role: 0,
- author: "Romim",
+ author: "Chitron Bhattacharjee",
  countDown: 5,
  longDescription: "Randomvideo",
  category: "randomvideo",
