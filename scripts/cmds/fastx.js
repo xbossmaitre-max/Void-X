@@ -22,7 +22,7 @@ const aspectRatioMap = {
 module.exports = {
  config: {
  name: "fastx",
- author: "Vincenzo | marincross",
+ author: "Chitron Bhattacharjee",
  version: "1.2",
  cooldowns: 5,
  role: 0,
