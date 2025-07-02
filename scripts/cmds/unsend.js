@@ -3,7 +3,7 @@ const { GoatWrapper } = require("fca-liane-utils");module.exports = {
 		name: "unsend",
 		aliases: ["rmv", "u", "uns"],
 		version: "1.2",
-		author: "NTKhang",
+		author: "Chitron Bhattacharjee",
 		countDown: 5,
 		role: 0,
 		description: {
