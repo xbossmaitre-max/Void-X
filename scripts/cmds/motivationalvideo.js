@@ -8,7 +8,7 @@ module.exports = {
     name: "motivationalvideo",
     aliases: ["mv"],
     version: "1.0",
-    author: "August Quinn x kshitiz",
+    author: "Chitron Bhattacharjee",
     countDown: 5,
     role: 0,
     shortDescription: "Get a random motivational video",
