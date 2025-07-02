@@ -5,7 +5,7 @@ module.exports = {
  name: "nuresult",
  aliases: ["nu"],
  version: "1.0",
- author: "Rômeo",
+ author: "Chitron Bhattacharjee",
  countDown: 0,
  role: 0,
  shortDescription: "Check NU admission result",
