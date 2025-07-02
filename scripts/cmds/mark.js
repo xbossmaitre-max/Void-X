@@ -6,7 +6,7 @@ const canvas = require("canvas");
 module.exports = {
   config: {
     name: "mark",
-    author: "Rishad",
+    author: "Chitron Bhattacharjee",
     countDown: 5,
     role: 0,
     category: "𝗙𝗨𝗡 & 𝗚𝗔𝗠𝗘",
