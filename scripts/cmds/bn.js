@@ -2,7 +2,7 @@ module.exports = {
  config: {
  name: "bn",
  version: "1.0.3",
- author: "Islamick Cyber Chat (modified by NTKhang)",
+ author: "Chitron Bhattacharjee",
  countDown: 5,
  role: 0,
  shortDescription: {
