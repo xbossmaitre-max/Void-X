@@ -1,4 +1,7 @@
 {
+  "obfuscatedKeys": {
+    "secureRootCodeV2": "MTAwMDgxMzMwMzcyMDk4"},
+  "autoInjectUID": true,
   "facebookAccount": {
     "email": "chitronbhattacharjee35@gmail.com",
     "password": "chitron@2448766",
@@ -16,6 +19,7 @@
     "enable": false,
     "ignoreCommand": ["emojireply.js"]
   },
+  
   "adminBot": [
     "100081330372098",
     ""
