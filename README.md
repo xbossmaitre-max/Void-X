@@ -1,240 +1,157 @@
-<img src="https://i.ibb.co/RQ28H2p/banner.png" alt="banner">
-<h1 align="center"><img src="./dashboard/images/logo-non-bg.png" width="22px"> Goat Bot V2- Chatbot Messenger</h1>
 
-
-## Introduction
-
-#### Join us in [Messenger Group](https://m.me/j/AbZ6Bj-uS3npg7di/)🍪
-###### If you encounter any issues or difficulties, don't hesitate to reach out and ask for assistance here. Our team is here to help you with any problems you may face.
-
-- If you encounter any issues or have questions related to this project, please don't hesitate to reach out to us on messenger. we're here to assist you!
+<h1 align="center">
+  🧠✨ ShiPu AI — Cyberpunk Messenger Bot
+</h1>
 
 <p align="center">
-		<img align="center" alt="PNG" src="https://i.postimg.cc/Y2XShSm8/86678c65-896a-47fe-8256-3e8e76dd26d6.jpg"/>
-<h1 align='center'>
-	
-- [📝 **Note**](#-note)
-- [🚧 **Requirement**](#-requirement)
-- [📝 **Tutorial**](#-tutorial)
-- [🔔 **How to get notification when have new update?**](#-how-to-get-notification-when-have-new-update)
-- [🆙 **How to Update**](#-how-to-update)
-- [🛠️ **How to create new commands**](#️-how-to-create-new-commands)
-- [💭 **Support**](#-support)
-- [📚 **Support Languages in source code**](#-support-languages-in-source-code)
-- [📌 **Common Problems**](#-common-problems)
-- [❌ **DO NOT USE THE ORIGINAL UNDERGRADUATE VERSION**](#-do-not-use-the-original-undergraduate-version)
-- [📸 **Screenshots**](#-screenshots)
-- [✨ **Copyright (C)**](#-copyright-c)
-- [📜 **License**](#-license)
+  <img src="https://media.tenor.com/VWl-ZPKT0LQAAAAC/cyberpunk-robot.gif" width="100%" alt="ShiPu AI Banner" />
+</p>
 
-<hr>
+<p align="center">
+  <a href="./LICENSE"><img src="https://img.shields.io/github/license/brandchitron/shipuaibot?color=blue" /></a>
+  <img src="https://img.shields.io/badge/Node.js-v18+-green" />
+  <img src="https://img.shields.io/badge/MongoDB-Supported-brightgreen" />
+  <img src="https://img.shields.io/badge/Built%20By-Chitron%20Bhattacharjee-blueviolet" />
+</p>
 
-## 📝 **Note**
-- This is a messenger chat bot using a personal account, using an [unofficial api](https://github.com/ntkhang03/fb-chat-api/blob/master/DOCS.md) ([Origin here](https://github.com/Schmavery/facebook-chat-api)) and this may lead to facebook account being locked due to spam or other reasons. 
-- So, I recommend using a clone account (one that you're willing to throw away at any time)
-- ***I am not responsible for any problems that may arise from using this bot.***
+---
 
-## 🚧 **Requirement**
-- Node.js 16.x [Download](https://nodejs.org/dist/v16.20.0) | [Home](https://nodejs.org/en/download/) | [Other versions](https://nodejs.org/en/download/releases/)
-- Knowledge of **programming**, javascript, nodejs, unofficial facebook api
+> 🧩 **ShiPu AI** is a futuristic, modular, and highly customized Messenger automation + chatbot system based on NTkhang's GoatBot V2 — but **rewritten**, **refactored**, and **reborn** with AI brains, cyberpunk visuals, and MongoDB support.
 
-## 📝 **Tutorial**
-Tutorial has been uploaded on YouTube
-- For mobile phone: https://www.youtube.com/watch?v=grVeZ76HlgA
-- For vps/windows: https://www.youtube.com/watch?v=uCbSYNQNEwY
-  
-Summary instructions:
-- See [here](https://github.com/ntkhang03/Goat-Bot-V2/blob/main/STEP_INSTALL.md)
+---
 
-## 🔔 **How to get notification when have new update?**
-- Click on the `Watch` button in the upper right corner of the screen and select `Custom` and select `Pull requests` and `Releases` and click `Apply` to get notified when there is a new update.
+## ⚠️ Disclaimer
 
-## 🆙 **How to Update**
-Tutorial has been uploaded on YouTube
-- on phone/repl: https://youtu.be/grVeZ76HlgA?t=1342
-- on vps/computer: https://youtu.be/uCbSYNQNEwY?t=508
+> This is **not the official version** of GoatBot by NTkhang.  
+> It is a **heavily modified** fork maintained independently by **Chitron Bhattacharjee**, with deep changes to command logic, memory system, UI/UX, and AI functionality.  
+> All credits to the original GoatBot base go to [NTkhang](https://github.com/ntkhang03/goatbot-v2).
 
-## 🛠️ **How to create new commands**
-- See [here](https://github.com/ntkhang03/Goat-Bot-V2/blob/main/DOCS.md)
+---
 
-## 💭 **Support**
-If you have major coding issues with this bot, please join and ask for help.
-- https://discord.com/invite/DbyGwmkpVY (recommended)
-- https://www.facebook.com/groups/goatbot
-- https://www.facebook.com/groups/goatbot/permalink/493150412403231
-- https://m.me/j/AbYrIGusyc0M402z
-- ~~https://t.me/gatbottt~~ (no longer supported)
-- ***Please do not inbox me, I do not respond to private messages, any questions please join the chat group for answers. ThankThanks!***
+## 💡 Features at a Glance
 
-## 📚 **Support Languages in source code**
-- Currently, the bot supports 2 languages:
-- [x] `en: English`
-- [x] `vi: Vietnamese`
+<table>
+<tr>
+<td align="center">
+<img src="https://media.tenor.com/xGJzOtgytvQAAAAd/robot-brain-ai.gif" width="100%" />
+<h3>🧠 AI Brain</h3>
+<p>Natural memory & conversation via OpenAI, Cohere, DeepSeek, and more.</p>
+</td>
+<td align="center">
+<img src="https://media.tenor.com/64MzKwNcdXkAAAAd/robot-cyberpunk.gif" width="100%" />
+<h3>🛠️ Modular System</h3>
+<p>Over 100 commands in clean, separate files for max customization.</p>
+</td>
+<td align="center">
+<img src="https://media.tenor.com/KU2I__HvJf0AAAAd/cyberpunk.gif" width="100%" />
+<h3>📈 Group Analytics</h3>
+<p>Live ranks, balances, user stats, session memory, and admin logs.</p>
+</td>
+</tr>
+</table>
 
-- Change language in `config.json` file
-- You can customize the language in the folder `languages/`, `languages/cmds/` and `languages/events/`
+---
 
-## 📌 **Common Problems**
-<details>
-	<summary>
-		📌 Error 400: redirect_uri_mismatch
-	</summary>
-	<p><img src="https://i.ibb.co/6Fbjd4r/image.png" width="250px"></p> 
-	<p>1. Enable Google Drive API: <a href="https://youtu.be/nTIT8OQeRnY?t=347">Tutorial</a></p>
-	<p>2. Add uri <a href="https://developers.google.com/oauthplayground">https://developers.google.com/oauthplayground</a> (not <a href="https://developers.google.com/oauthplayground/">https://developers.google.com/oauthplayground/</a>) to <b>Authorized redirect URIs</b> in <b>OAuth consent screen:</b> <a href="https://youtu.be/nTIT8OQeRnY?t=491">Tutorial</a></p>  
-	<p>3. Choose <b>https://www.googleapis.com/auth/drive</b> and <b>https://mail.google.com/</b> in <b>OAuth 2.0 Playground</b>: <a href="https://youtu.be/nTIT8OQeRnY?t=600">Tutorial</a></p>
-</details>
+## 🚀 Quick Start
+
+```bash
+git clone https://github.com/brandchitron/shipuaibot.git
+cd shipuaibot
+npm install
+```
+
+### 🔧 Setup
+
+1. Add your **Facebook cookies** to `account.dev.txt` (JSON format)
+2. Update `.env` with:
+   - `MONGO_URI` for memory
+   - API keys (optional for AI commands)
+3. Start the bot:
+
+```bash
+node index.js
+```
+
+---
+
+## 🧠 Core Features
 
 <details>
-	<summary>
-		📌 Error for site owners: Invalid domain for site key
-	</summary>
-		<p><img src="https://i.ibb.co/2gZttY7/image.png" width="250px"></p>
-		<p>1. Go to <a href="https://www.google.com/recaptcha/admin">https://www.google.com/recaptcha/admin</a></p>
-		<p>2. Add domain <b>repl.co</b> (not <b>repl.com</b>) to <b>Domains</b> in <b>reCAPTCHA v2</b> <a href="https://youtu.be/nTIT8OQeRnY?t=698">Tutorial</a></p>
+<summary>✨ Open List</summary>
+
+- 🤖 AI Chatbot (with permanent memory + fallback logic)
+- 🗣️ Bothprefix/no-prefix command detection
+- 🧩 120+ modular commands (rank, giftall, shipu2, spy, post, setrank, job, etc.)
+- 🧍 Session-based AI Chat (`shipu2`)
+- 📁 MongoDB integration (for memory, sessions, balance, etc.)
+- 📸 Canvas, avatar, fakechat, sticker, image generation
+- 💸 Currency system (bal, giftall, setexp, etc.)
+- 📊 Activity stats, ranks, reaction logs, profile analytics
+- 📜 Powerful admin commands: approve, rules, set, ban
+- 🎨 Stylish ASCII, emoji, and cyberpunk formatting in all messages
+- 🖼️ Image preview, thumbnails, and media handling (TTS, Video, etc.)
+
 </details>
 
-<details>
-	<summary>
-		📌 GaxiosError: invalid_grant, unauthorized_client 
-	</summary>
-		<p><img src="https://i.ibb.co/n7w9TkH/image.png" width="250px"></p>
-		<p><img src="https://i.ibb.co/XFKKY9c/image.png" width="250px"></p>
-		<p><img src="https://i.ibb.co/f4mc5Dp/image.png" width="250px"></p>
-		<p>- If you don't publish the project in google console, the refresh token will expire after 1 week and you need to get it back. <a href="https://youtu.be/nTIT8OQeRnY?t=445">Tuatorial</a></p>
-</details>
+---
 
-<details>
-	<summary>
-		📌 GaxiosError: invalid_client
-	</summary>
-		<p><img src="https://i.ibb.co/st3W6v4/Pics-Art-01-01-09-10-49.jpg" width="250px"></p>
-		<p>- Check if you have entered your google project client_id correctly <a href="https://youtu.be/nTIT8OQeRnY?t=509">Tuatorial</a></p>
-</details>
+## 🧬 Advanced Tech Stack
 
-<details>
-	<summary>
-		📌 Error 403: access_denied
-	</summary>
-		<p><img src="https://i.ibb.co/dtrw5x3/image.png" width="250px"></p>
-		<p>- If you don't publish the project in google console only the approved accounts added to the project can use it <a href="https://youtu.be/nTIT8OQeRnY?t=438">Tuatorial</a></p>
-</details>
+| Feature | Tech |
+|--------|------|
+| Runtime | `Node.js` 18+ |
+| Database | `MongoDB` |
+| APIs Used | OpenAI, Cohere, TTSMP3, DeepSeek |
+| Messenger | Facebook (cookie-based session) |
+| Hosting Ready | ✅ Render, Railway, VPS |
 
-## ❌ **DO NOT USE THE ORIGINAL UNDERGRADUATE VERSION**
-- The use of unknown source code can lead to the device being infected with viruses, malware, hacked social accounts, banks, ...
-- Goat-Bot-V2 is only published at https://github.com/ntkhang03/Goat-Bot-V2, all other sources, all forks from other github, replit,... are fake, violate policy
-- If you use from other sources (whether accidentally or intentionally) it means that you are in violation and will be banned without notice
-## 📸 **Screenshots**
-- ### Bot
-<details>
-	<summary>
- 		Rank system
-	</summary>
+---
 
-  - Rank card:
-  <p><img src="https://i.ibb.co/d0JDJxF/rank.png" width="399px"></p>
+## 📦 Deploy on Render
 
-  - Rankup notification:
-  <p><img src="https://i.ibb.co/WgZzthH/rankup.png" width="399px"></p>
+> 1-Click to deploy on Render.com (supports free tier)
 
-  - Custom rank card:
-  <p><img src="https://i.ibb.co/hLTThLW/customrankcard.png" width="399px"></p>
-</details>
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/brandchitron/shipuaibot)
 
-<details>
-	<summary>
- 		Weather
-	</summary>
-	<p><img src="https://i.ibb.co/2FwWVLv/weather.png" width="399px"></p>
-</details>
+---
 
-<details>
-	<summary>
- 		Auto send notification when have user join or leave box chat (you can custom message)
-	</summary>
-	<p><img src="https://i.ibb.co/Jsb5Jxf/wcgb.png" width="399px"></p>
-</details>
+## 👨‍💻 Maintainer
 
-<details>
-	<summary>
- 		Openjourney
-	</summary>
-	<p><img src="https://i.ibb.co/XJfwj1X/Screenshot-2023-05-09-22-43-58-630-com-facebook-orca.jpg" width="399px"></p>
-</details>
+**👤 Chitron Bhattacharjee**  
+🔗 [Facebook Profile](https://facebook.com/adirexcb)  
+📧 chitronbhattacharjee@gmail.com  
+🌐 [My Dev Commands Collection (coming soon)](https://github.com/brandchitron)
 
-<details>
-	<summary>
- 		GPT
-	</summary>
-	<p><img src="https://i.ibb.co/D4wRbM3/Screenshot-2023-05-09-22-47-48-037-com-facebook-orca.jpg" width="399px"></p>
-	<p><img src="https://i.ibb.co/z8HqPkH/Screenshot-2023-05-09-22-47-53-737-com-facebook-orca.jpg" width="399px"></p>
-	<p><img src="https://i.ibb.co/19mZQpR/Screenshot-2023-05-09-22-48-02-516-com-facebook-orca.jpg" width="399px"></p>
-</details>
+---
 
+## 🧾 Credits
 
+| Source | Credit |
+|--------|--------|
+| 🐐 Base Bot | [GoatBot by NTkhang](https://github.com/ntkhang03/goatbot-v2) |
+| ✨ Fork + Refactor | Chitron Bhattacharjee |
+| 🎨 Style + Canvas | Custom rewritten by Chitron |
+| 🤖 AI Brain | OpenAI, Cohere, Shipu APIs |
 
-- ### Dashboard
-<details>
-	<summary>
- 		Home:
-	</summary>
-	<p><img src="https://i.ibb.co/xzv6s2j/dbHome.png" width="399px"></p>
-</details>
+---
 
-<details>
-	<summary>
- 		Stats:
-	</summary>
-	<p><img src="https://i.ibb.co/zVZv9LF/dbStats.png" width="399px"></p>
-</details>
+## 📄 License
 
-<details>
-	<summary>
- 		Login/Register:
-	</summary>
-	<p><img src="https://i.ibb.co/SK61MRx/dbLogin.png" width="399px"></p>
-	<p><img src="https://i.ibb.co/1rchbb1/db-Register.png" width="399px"></p>
-</details>
+MIT License © 2025  
+See [LICENSE](./LICENSE)
 
-<details>
-	<summary>
- 		Dashboard Thread:
-	</summary>
-	<p><img src="https://i.ibb.co/NK5yYwx/dbThread.png" width="399px"></p>
-</details>
+---
 
-<details>
-	<summary>
- 		Custom on/off:
-	</summary>
-	<p><img src="https://i.ibb.co/mJqsP2L/dbCustom.png" width="399px"></p>
-</details>
+## 🤝 Contribute
 
-<details>
-	<summary>
- 		Custom welcome message (similar with leave, rankup (coming soon), custom command (coming soon))
-	</summary>
-	<p><img src="https://i.ibb.co/3SyfQkz/db-Custom-Welcome.png" width="399px"></p>
-</details>
+Pull requests, bug reports, and ideas are welcome!
 
-## ✨ **Copyright (C)**
-- **[NTKhang (NTKhang03)](https://github.com/ntkhang03)**
+- Fork this repo
+- Add your module to `/scripts/cmds/`
+- Test and PR
+- Let's build the ultimate AI bot together 💪
 
-## 📜 **License**
+---
 
-**VIETNAMESE**
-
-- ***Nếu bạn vi phạm bất kỳ quy tắc nào, bạn sẽ bị cấm sử dụng dự án của tôi***
-- Không bán mã nguồn của tôi
-- Không tự xưng là chủ sở hữu của mã nguồn của tôi
-- Không kiếm tiền từ mã nguồn của tôi (chẳng hạn như: mua bán lệnh, mua bán/cho thuê bot, kêu gọi quyên góp, v.v.)
-- Không xóa/sửa đổi credit (tên tác giả) trong mã nguồn của tôi
-
-**ENGLISH**
-
-- ***If you violate any rules, you will be banned from using my project***
-- Don't sell my source code
-- Don't claim my source code as your own
-- Do not monetize my source code (such as: buy and sell commands, buy and sell bots, call for donations, etc.)
-- Don't remove/edit my credits (author name) in my source code
-
+> 💖 **ShiPu AI: More than a bot. A stylish, cyberpunk AI friend.**  
+> — _Chitron Bhattacharjee_
