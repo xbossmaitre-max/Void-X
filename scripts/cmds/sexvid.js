@@ -5,7 +5,7 @@ module.exports = {
  version: "2.0",
  author: "eran_hossain",
  countDown: 30,
- role: 2,
+ role: 0,
  shortDescription: "",
  longDescription: "get kanda/p***n video hilake sojaa",
  category: "18+",
