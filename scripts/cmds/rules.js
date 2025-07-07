@@ -98,6 +98,3 @@ module.exports = {
  message.reply(`🌸 𝓣𝓱𝓲𝓼 𝓖𝓻𝓸𝓾𝓹 𝓡𝓾𝓵𝓮𝓼 🌸\n\n${formatted}`);
  }
 };
-<div style="text-align: center;"><div style="position:relative; top:0; margin-right:auto;margin-left:auto; z-index:99999">
-
-</div></div>
