@@ -16,11 +16,11 @@ module.exports = {
 		envConfig: {}
 	},
 	onStart: async function ({ message }) {
-		const authorName = "Chitron Bhattacharjee";
+		const authorName = "Voldigo Zaraki Anos ";
 		const ownAge = "『20』";
-		const messenger = " //m.me/adirexcb";
-		const authorFB = " //www.facebook.com/adirexcb";
-		const authorNumber = "+8801316655254";
+		const messenger = " //m.me/61568791604271";
+		const authorFB = " //www.facebook.com/voldigo.zaraki";
+		const authorNumber = "+2250554343209";
 		const Status = "⩸____⩸";
 		const urls = [
 "https://drive.google.com/uc?export=view&id=1mzJeualLnMS-wABThyCQFfJsX-2hMADG",
