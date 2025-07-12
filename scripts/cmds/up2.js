@@ -1,7 +1,7 @@
 module.exports = {
  config: {
- name: "up",
- aliases: ["uptime", "upt"],
+ name: "up2",
+ aliases: ["uptime2", "upt2"],
  version: "2.0",
  author: "Chitron Bhattacharjee",
  countDown: 3,
