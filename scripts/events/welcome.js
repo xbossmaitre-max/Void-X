@@ -1,3 +1,23 @@
+Skip to content
+Navigation Menu
+3voldi
+INCONNU-XD-V2
+
+Code
+Issues
+Pull requests
+Actions
+Projects
+Security
+Insights
+INCONNU-XD-V2/scripts/events
+/welcome.js
+ 
+132 lines (123 loc) · 5.4 KB
+
+Code
+
+Blame
 const { getTime, drive } = global.utils;
 if (!global.temp.welcomeEvent)
 	global.temp.welcomeEvent = {};
@@ -22,14 +42,14 @@ module.exports = {
 			defaultWelcomeMessage: "Xin chào {userName}.\nChào mừng bạn đến với {boxName}.\nChúc bạn có buổi {session} vui vẻ!"
 		},
 		en: {
-			session1: "morning",
-			session2: "noon",
-			session3: "afternoon",
-			session4: "evening",
-			welcomeMessage: "Thank you for inviting me to the group!\nBot prefix: %1\nTo view the list of commands, please enter: %1help",
-			multiple1: "you",
-			multiple2: "you guys",
-			defaultWelcomeMessage: `Hello {userName}.\nWelcome {multiple} to the chat group: {boxName}\nHave a nice {session} 😊`
+			session1: "𝗺𝗼𝗿𝗻𝗶𝗻𝗴",
+			session2: "𝗻𝗼𝗼𝗻",
+			session3: "𝗮𝗳𝘁𝗲𝗿𝗻𝗼𝗼𝗻",
+			session4: "𝗲𝘃𝗲𝗻𝗶𝗻𝗴",
+			welcomeMessage: "👨‍🏫 𝑰𝑵𝑪𝑶𝑵𝑵𝑼-𝑿𝑫-𝑽2 👨‍🏫\n\n 𝑴𝒆𝒓𝒄𝒊 𝒅𝒆 𝒎'𝒂𝒗𝒐𝒊𝒓 𝒊𝒏𝒗𝒊𝒕𝒆́ 𝒅𝒂𝒏𝒔 𝒗𝒐𝒕𝒓𝒆 𝒈𝒓𝒐𝒖𝒑!\n 𝗕𝗼𝘁 𝗽𝗿𝗲𝗳𝗶𝘅: %1\n𝑷𝒐𝒖𝒓 𝒗𝒐𝒊𝒓 𝒎𝒆𝒔 𝒄𝒐𝒎𝒎𝒂𝒏𝒅𝒆𝒔, 𝒔'𝒊𝒍 𝒕𝒆 𝒑𝒍𝒂𝒊̂𝒕 𝒆́𝒄𝒓𝒊𝒕: %1𝗵𝗲𝗹𝗽\n\n♻ 𝗜 𝗵𝗼𝗽𝗲 𝘆𝗼𝘂 𝘄𝗶𝗹𝗹 𝗳𝗼𝗹𝗹𝗼𝘄 𝗼𝘂𝗿 𝗮𝗹𝗹 𝗴𝗿𝗼𝘂𝗽 𝗿𝘂𝗹𝗲𝘀 ♻",
+			multiple1: "𝘆𝗼𝘂",
+			multiple2: "𝘆𝗼𝘂 𝗴𝘂𝘆𝘀",
+			defaultWelcomeMessage: `🍒𝑰𝑵𝑪𝑶𝑵𝑵𝑼-𝑿𝑫-𝑽2🍒\n\n 𝑺𝒂𝒍𝒖𝒕 {userName}.\n𝑩𝒊𝒆𝒏𝒗𝒆𝒏𝒖 {multiple} 𝑫𝒂𝒏𝒔 𝒍𝒆 𝒈𝒓𝒐𝒖𝒑𝒆: {boxName}\n 𝗛𝗮𝘃𝗲 𝗮 𝗻𝗶𝗰𝗲 {session} \n\n♻ 𝗜 𝗵𝗼𝗽𝗲 𝘆𝗼𝘂 𝘄𝗶𝗹𝗹 𝗳𝗼𝗹𝗹𝗼𝘄 𝗼𝘂𝗿 𝗮𝗹𝗹 𝗴𝗿𝗼𝘂𝗽 𝗿𝘂𝗹𝗲𝘀 ♻\n\n🐔🌬 𝗔𝗽𝗻𝗮𝗸𝗲 𝗮𝗺𝗮𝗱𝗲𝗿 𝗮𝗶 𝗴𝗿𝗼𝘂𝗽𝗲 𝗮𝘀𝗮𝗿 𝗷𝗼𝗻𝗻𝗼 𝗮𝗻𝗲𝗸 𝗼𝗻𝗲𝗸 𝘀𝘂𝗯𝗲𝗰𝗰𝗵𝗮 😘😊`
 		}
 	},
 
@@ -130,3 +150,15 @@ module.exports = {
 			};
 	}
 };
+Footer
+© 2025 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
+Status
+Docs
+Contact
+Manage cookies
+Do not share my personal information
+
