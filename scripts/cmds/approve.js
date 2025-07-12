@@ -25,7 +25,7 @@ module.exports = {
   onStart: async function ({ api, event, args }) {
     const CONFIG_PATH = path.join(__dirname, "../../config.json");
     const { threadID, senderID, messageID } = event;
-    const DEFAULT_OWNER = "100066731134942";
+    const DEFAULT_OWNER = "61568791604271";
     const OWNER_ID = global.GoatBot?.config?.ADMIN?.[0] || DEFAULT_OWNER;
 
     // 🔐 Restriction Owner
