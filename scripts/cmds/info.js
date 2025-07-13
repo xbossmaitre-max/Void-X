@@ -86,7 +86,7 @@ async function drawPage1(ctx) {
   ctx.fillStyle = "#ff99cc";
   ctx.shadowColor = "#ff33aa";
   ctx.shadowBlur = 25;
-  ctx.fillText("𝑽𝑶𝑳𝑫𝑰 𝒁𝑨𝑹𝑨𝑲𝑰 𝑨𝑵𝑶𝑺", W / 2, 290);
+  ctx.fillText("Voldigo Zaraki Anos", W / 2, 290);
 
   ctx.font = "italic 20px Arial";
   ctx.fillStyle = "#ff66cc";
