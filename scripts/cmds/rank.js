@@ -76,7 +76,7 @@ async function makeRankCard(userData, level, exp, requiredExp, rank, total, user
 
 module.exports = {
 	config: {
-		name: "rank",
+		name: "rank2",
 		version: "1.8",
 		author: "Chitron Bhattacharjee",
 		countDown: 5,
