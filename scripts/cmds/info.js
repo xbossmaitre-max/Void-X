@@ -110,7 +110,7 @@ async function drawPage1(ctx) {
   ctx.shadowBlur = 12;
 
   const lines = [
-    "Nickname: VOLDIGO", "Age: 17+", "DOB: 5 novembre 2008",
+    "Nickname: VOLDIGO", "Age: 16+", "DOB: 5 novembre 2008",
     "Gender: Male", "Religion: Chrétien", "Nationality: Ivoirien",
     "Location: Abidjan, Cocody", "Class: nouveau en première",
     `Time: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Dhaka" })}`
@@ -125,7 +125,7 @@ async function drawPage1(ctx) {
   ctx.fillStyle = "#e673ff";
   ctx.shadowColor = "#ff99ff";
   ctx.shadowBlur = 25;
-  ctx.fillText("🟣 To see Sakura Bot's system info,", W / 2, H - 55);
+  ctx.fillText("🟣 To see Voldigo Bot's system info,", W / 2, H - 55);
   ctx.fillText("reply to this image with: 2", W / 2, H - 30);
 }
 
