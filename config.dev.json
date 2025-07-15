@@ -29,8 +29,8 @@
     "whiteListIds": [],
     "notes": "if you enable this feature, only the ids in the whiteListIds section can use the bot"
   },
-  "nickNameBot": "‌𝑰𝑵𝑪𝑶𝑵𝑵𝑼-𝑿𝑫-𝑽2",
-  "prefix": "§",
+  "nickNameBot": "‌𝑰𝑵𝑪𝑶𝑵𝑵𝑼-𝑿𝑫-𝑽4",
+  "prefix": "@",
   "database": {
     "type": "mongodb",
     "uriMongodb": "mongodb+srv://shipuaimirai:chitron%402448766@shipuaimiraibot.nwesgqa.mongodb.net/?retryWrites=true&w=majority&appName=ShiPuAiMiraiBot",
