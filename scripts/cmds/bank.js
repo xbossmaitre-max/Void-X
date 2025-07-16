@@ -1,5 +1,5 @@
 const { getTime } = global.utils;
-const title = "🏦| 𝐕𝐨𝐥𝐝𝐢𝗕𝗮𝗻𝗸 v1.0";
+const title = "🏦| 𝗩𝗼𝗹𝗱𝗶𝗕𝗮𝗻𝗸 v1.0";
 
 module.exports = {
   config: {
@@ -19,6 +19,22 @@ module.exports = {
     }
   },
 
+  langs: {
+    vi: {
+      help: "Danh sách lệnh ngân hàng",
+      success: "Thành công",
+      error: "Lỗi",
+      insufficientFunds: "Không đủ tiền",
+      invalidAmount: "Số tiền không hợp lệ"
+    },
+    en: {
+      help: "Banking commands list",
+      success: "Success",
+      error: "Error",
+      insufficientFunds: "Insufficient funds",
+      invalidAmount: "Invalid amount"
+    }
+  },
   langs: {
     vi: {
       help: "Danh sách lệnh ngân hàng",
@@ -56,7 +72,6 @@ module.exports = {
       case "deposit":
       case "dep":
         return this.deposit(message, args, userData, usersData, senderID, API_BASE);
-
       case "withdraw":
       case "wd":
         return this.withdraw(message, args, userData, usersData, senderID, API_BASE);
@@ -96,7 +111,6 @@ module.exports = {
     const helpText = `
 🏦 ${title}
 ━━━━━━━━━━━━━
-
 Hello ${userName}! Please choose your service:
 
 💰 BASIC BANKING
@@ -143,7 +157,6 @@ Start with 'bank balance' to see your account!
         const balanceText = `
 🏦 ${title}
 ━━━━━━━━━━━━━
-
 Hello ${userName}! Please choose your service:
 
 💳 YOUR ACCOUNT OVERVIEW
@@ -179,7 +192,6 @@ Hello ${userName}! Please choose your service:
     if (!amount || amount <= 0 || isNaN(amount)) {
       return message.reply(`🏦 ${title}\n\n❌ Please enter a valid amount to deposit.`);
     }
-
     try {
       const balanceResponse = await fetch(`${API_BASE}/balance/${senderID}`);
       const balanceData = await balanceResponse.json();
@@ -208,7 +220,6 @@ Hello ${userName}! Please choose your service:
         body: JSON.stringify({ userId: senderID, amount })
       });
       const data = await response.json();
-
       if (data.success) {
         const newMoney = Math.max(0, userMoney - amount);
         currentUserData.money = newMoney;
@@ -238,8 +249,7 @@ Hello ${userName}! Please choose your service:
       
       if (!balanceData.success) {
         return message.reply(`🏦 ${title}\n\n❌ Error accessing your bank account.`);
-      }
-
+    }
       const bankBalance = balanceData.data.bank;
       
       const gstAmount = Math.floor(amount * 0.02);
@@ -264,7 +274,6 @@ Hello ${userName}! Please choose your service:
         if (currentMoney > Number.MAX_SAFE_INTEGER || currentMoney < 0) {
           currentMoney = Math.max(0, Math.min(Number.MAX_SAFE_INTEGER, currentMoney));
         }
-
         const newMoney = Math.min(Number.MAX_SAFE_INTEGER, currentMoney + amount);
         currentUserData.money = newMoney;
         await usersData.set(senderID, currentUserData);
@@ -297,7 +306,6 @@ Hello ${userName}! Please choose your service:
       return message.reply(`🏦 ${title}\n\n❌ Error collecting interest`);
     }
   },
-
   showLeaderboard: async function (message, API_BASE, api) {
     try {
       const response = await fetch(`${API_BASE}/leaderboard`);
@@ -333,7 +341,6 @@ Hello ${userName}! Please choose your service:
           leaderboardText += `   📊 Credit: ${user.creditScore}\n`;
           leaderboardText += `━━━━━━━━━━\n\n`;
         });
-
         leaderboardText += `💡 TIP: Invest in stocks and crypto to climb the rankings!`;
 
         return message.reply(leaderboardText);
@@ -378,7 +385,6 @@ Hello ${userName}! Please choose your service:
       if (userMoney < amount) {
         return message.reply(`🏦 ${title}\n\n❌ Insufficient wallet funds.`);
       }
-
       try {
         const response = await fetch(`${API_BASE}/card/deposit`, {
           method: 'POST',
@@ -426,7 +432,6 @@ Hello ${userName}! Please choose your service:
         return message.reply(`🏦 ${title}\n\n❌ Error withdrawing from card`);
       }
     }
-
     return message.reply(`🏦 ${title}\n\n❌ Usage: bank card <create/deposit/withdraw> [amount]`);
   },
 
@@ -455,7 +460,6 @@ Hello ${userName}! Please choose your service:
           stockList += `**Usage:**\n`;
           stockList += `• bank stocks buy <symbol> <shares>\n`;
           stockList += `• bank stocks sell <symbol> <shares>`;
-
           return message.reply(stockList);
         } else {
           return message.reply(`🏦 ${title}\n\n❌ ${data.message}`);
@@ -473,6 +477,28 @@ Hello ${userName}! Please choose your service:
         return message.reply(`🏦 ${title}\n\n❌ Usage: bank stocks buy <symbol> <shares>`);
       }
 
+      try {
+        const response = await fetch(`${API_BASE}/stocks/buy`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: senderID, symbol, shares })
+        });
+        const data = await response.json();
+
+        if (data.success) {
+          return message.reply(`🏦 ${title}\n\n✅ Bought ${data.shares} shares of ${data.symbol} for $${data.totalCost.toLocaleString()}`);
+        } else {
+          return message.reply(`🏦 ${title}\n\n❌ ${data.message}`);
+        }
+      } catch (error) {
+        return message.reply(`🏦 ${title}\n\n❌ Error buying stocks`);
+      }
+    }
+
+    if (action === "sell") {
+      if (!symbol || !shares || shares <= 0) {
+        return message.reply(`🏦 ${title}\n\n❌ Usage: bank stocks sell <symbol> <shares>`);
+      }
       try {
         const response = await fetch(`${API_BASE}/stocks/buy`, {
           method: 'POST',
@@ -524,7 +550,6 @@ Hello ${userName}! Please choose your service:
       try {
         const response = await fetch(`${API_BASE}/crypto/list`);
         const data = await response.json();
-
         if (data.success) {
           let cryptoList = `🏦 ${title}\n\n₿ CRYPTOCURRENCY - MOON POTENTIAL\n━━━━━━━━━━\n\n`;
 
@@ -567,7 +592,6 @@ Hello ${userName}! Please choose your service:
           body: JSON.stringify({ userId: senderID, cryptoName, amount })
         });
         const data = await response.json();
-
         if (data.success) {
           return message.reply(`🏦 ${title}\n\n✅ Bought ${data.amount} ${data.cryptoName.toUpperCase()} for $${data.totalCost.toLocaleString()}`);
         } else {
@@ -577,6 +601,7 @@ Hello ${userName}! Please choose your service:
         return message.reply(`🏦 ${title}\n\n❌ Error buying crypto`);
       }
     }
+
     if (action === "sell") {
       if (!cryptoName || !amount || amount <= 0) {
         return message.reply(`🏦 ${title}\n\n❌ Usage: bank crypto sell <name> <amount>`);
@@ -613,7 +638,6 @@ Hello ${userName}! Please choose your service:
 
         if (data.success) {
           const lotteryText = `🏦 ${title}
-
 🎰 LOTTERY INFORMATION
 ━━━━━━━━━━
 
@@ -656,16 +680,7 @@ Hello ${userName}! Please choose your service:
           const currentUserData = await usersData.get(senderID);
           currentUserData.money = (currentUserData.money || 0) - data.ticketPrice;
           await usersData.set(senderID, currentUserData);
-
           return message.reply(`🏦 ${title}\n\n🎫 Bought lottery ticket #${data.number} for $${data.ticketPrice.toLocaleString()}!\nPrize Pool: $${data.prizePool.toLocaleString()}`);
-        } else {
-          return message.reply(`🏦 ${title}\n\n❌ ${data.message}`);
-        }
-      } catch (error) {
-        return message.reply(`🏦 ${title}\n\n❌ Error buying lottery ticket`);
-      }
-    }
-    return message.reply(`🏦 ${title}\n\n🎫 Bought lottery ticket #${data.number} for $${data.ticketPrice.toLocaleString()}!\nPrize Pool: $${data.prizePool.toLocaleString()}`);
         } else {
           return message.reply(`🏦 ${title}\n\n❌ ${data.message}`);
         }
@@ -698,10 +713,10 @@ Hello ${userName}! Please choose your service:
             } else if (tx.type === 'crypto_buy' || tx.type === 'crypto_sell') {
               historyText += `   ₿ ${tx.type === 'crypto_buy' ? 'Investment' : 'Profit'}: $${tx.amount.toLocaleString()}\n`;
             }
-            
             historyText += `━━━━━━━━━━\n`;
           });
-    historyText += `\n**📊 SUMMARY:**\n`;
+
+          historyText += `\n**📊 SUMMARY:**\n`;
           historyText += `• Total Transactions: ${data.totalTransactions}\n`;
           historyText += `• Showing: Latest ${data.transactions.length} transactions\n`;
           historyText += `\n**💡 TIP: Use 'bank balance' to see current portfolio value!**`;
