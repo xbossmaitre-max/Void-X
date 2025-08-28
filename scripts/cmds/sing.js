@@ -1,43 +1,87 @@
 const axios = require("axios");
 const fs = require("fs");
-const yts = require("yt-search");
 const path = require("path");
-const cacheDir = path.join(__dirname, "cache");
 
 module.exports = {
- config: {
- name: "sing",
- version: "3.0",
- author: "Chitron Bhattacharjee",
- countDown: 5,
- role: 0,
- longDescription: { en: "Search and download audio from YouTube" },
- category: "media",
- guide: { en: "{pn} <song name>" },
- },
+  config: {
+    name: "sing",
+    version: "1.0",
+    author: "Aryan Chauhan",
+    countDown: 5,
+    role: 0,
+    shortDescription: "Sing with YouTube2 API",
+    longDescription: "Play music from YouTube by searching with a query, using YouTube2 API.",
+    category: "music",
+    guide: {
+      en: "{pn} <song name>\nExample: {pn} apt"
+    }
+  },
 
- onStart: async ({ api, args, event }) => {
- if (!args[0]) return api.sendMessage("Please provide song name.", event.threadID, event.messageID);
- api.setMessageReaction("⏳", event.messageID, () => {}, true);
- try {
- const { videos } = await yts(args.join(" "));
- if (!videos[0]) return api.sendMessage("No results found.", event.threadID, event.messageID);
- const video = videos[0], url = `https://musicapiz.vercel.app/music?url=${encodeURIComponent(video.url)}`;
- const { data } = await axios.get(url);
- if (!data?.download_url) return api.sendMessage("Failed to get download link.", event.threadID, event.messageID);
- const file = path.join(cacheDir, `${video.videoId}.mp3`);
- const res = await axios.get(data.download_url, { responseType: 'stream' });
- res.data.pipe(fs.createWriteStream(file)).on("finish", () => {
- api.sendMessage({
- body: `🎵 Title: ${data.title}\n⏳ Duration: ${data.duration}\n📥 Quality: ${data.quality}`,
- attachment: fs.createReadStream(file)
- }, event.threadID, () => fs.unlinkSync(file), event.messageID);
- api.setMessageReaction("✅", event.messageID, () => {}, true);
- });
- } catch (e) {
- console.error(e);
- api.sendMessage("Error occurred.", event.threadID, event.messageID);
- api.setMessageReaction("❌", event.messageID, () => {}, true);
- }
- }
+  onStart: async function ({ api, event, args }) {
+    const query = args.join(" ");
+    if (!query) {
+      return api.sendMessage(
+        "⚠️ Please provide a song name!\nExample: sing apt",
+        event.threadID,
+        event.messageID
+      );
+    }
+
+    const tid = event.threadID;
+    const filePath = path.join(__dirname, "sing.mp3");
+
+    api.sendMessage(
+      `🎤 Fetching YouTube song...\n🔍 Query: ${query}`,
+      tid,
+      async (err, info) => {
+        if (err) return;
+        const genMsgID = info.messageID;
+
+        try {
+    const { data } = await axios.get(
+            `https://aryapio.onrender.com/play/youtube2?q=${encodeURIComponent(query)}&apikey=aryan123`
+          );
+
+          if (!data?.status || !data?.data?.audio) {
+            api.sendMessage("❌ Failed to get audio link.", tid, event.messageID);
+            return api.unsendMessage(genMsgID);
+          }
+
+          const response = await axios({
+            method: "GET",
+            url: data.data.audio,
+            responseType: "stream"
+          });
+
+          const writer = fs.createWriteStream(filePath);
+          response.data.pipe(writer);
+
+          writer.on("finish", () => {
+            api.sendMessage(
+              {
+                body: `✅ Here is your song!\n🎶 ${query}`,
+                attachment: fs.createReadStream(filePath)
+              },
+              tid,
+              () => {
+                fs.unlinkSync(filePath);
+                api.unsendMessage(genMsgID);
+              },
+              event.messageID
+            );
+          });
+
+          writer.on("error", () => {
+            api.sendMessage("❌ Failed to save audio file.", tid, event.messageID);
+            api.unsendMessage(genMsgID);
+          });
+
+        } catch (err) {
+          console.error(err);
+          api.sendMessage("❌ Error: Unable to fetch song. Please try again later.", tid, event.messageID);
+          api.unsendMessage(genMsgID);
+        }
+      }
+    );
+  }
 };
