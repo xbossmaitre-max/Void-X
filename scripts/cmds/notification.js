@@ -5,7 +5,7 @@ module.exports = {
 		name: "notification",
 		aliases: ["notify", "noti"],
 		version: "1.7",
-		author: "Chitron Bhattacharjee",
+		author: "NTKhang",
 		countDown: 5,
 		role: 2,
 		description: {
@@ -31,7 +31,7 @@ module.exports = {
 		},
 		en: {
 			missingMessage: "Please enter the message you want to send to all groups",
-			notification: "Notification from admin bot to all chat groups (do not reply to this message)",
+			notification: "📝| 𝙽𝙾𝚃𝙸𝙵𝙸𝙲𝙰𝚃𝙸𝙾𝙽 𝙴𝙽𝚅𝙾𝚈𝙴𝙴 𝙿𝙰𝚁 𝙼𝙾𝙽 𝙰𝙳𝙼𝙸𝙽",
 			sendingNotification: "Start sending notification from admin bot to %1 chat groups",
 			sentNotification: "✅ Sent notification to %1 groups successfully",
 			errorSendingNotification: "An error occurred while sending to %1 groups:\n%2"
@@ -43,7 +43,7 @@ module.exports = {
 		if (!args[0])
 			return message.reply(getLang("missingMessage"));
 		const formSend = {
-			body: `${getLang("notification")}\n────────────────\n${args.join(" ")}`,
+			body: `${getLang("notification")}\n────────────────\n${args.join(" ")} ✎﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏ ❥ʕ❦•ᴥ•ʔ𝐒𝐎𝐍𝐈𝐂🍀🏂 `,
 			attachment: await getStreamsFromAttachment(
 				[
 					...event.attachments,
