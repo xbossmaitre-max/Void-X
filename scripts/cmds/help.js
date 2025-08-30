@@ -1,4 +1,5 @@
-const fs = require("fs");
+const fs = require("fs-extra");
+const axios = require("axios");
 const path = require("path");
 const { getPrefix } = global.utils;
 const { commands, aliases } = global.GoatBot;
@@ -6,170 +7,116 @@ const { commands, aliases } = global.GoatBot;
 module.exports = {
   config: {
     name: "help",
-    version: "3.2",
-    author: "NTKhang // xnil6x",
+    version: "1.17",
+    author: "Aesther",
     countDown: 5,
     role: 0,
-    description: "View command information with enhanced interface",
+    shortDescription: {
+      en: "View command usage and list all commands directly",
+    },
+    longDescription: {
+      en: "View command usage and list all commands directly",
+    },
     category: "info",
     guide: {
-      en: "{pn} [command] - View command details\n{pn} all - View all commands\n{pn} c [category] - View commands in category"
-    }
+      en: "{pn} / help cmdName ",
+    },
+    priority: 1,
   },
 
-  langs: {
-    en: {
-      helpHeader: "╔══════════◇◆◇══════════╗\n"
-                + "      BOT COMMAND LIST\n"
-                + "╠══════════◇◆◇══════════╣",
-      categoryHeader: "\n   ┌────── {category} ──────┐\n",
-      commandItem: "║ │ 💦 {name}",
-      helpFooter: "║ └─────────────────┘\n"
-                + "╚══════════◇◆◇══════════╝",
-      commandInfo: "╔══════════◇◆◇══════════╗\n"
-                 + "║           COMMAND INFORMATION      \n"
-                 + "╠══════════◇◆◇══════════╣\n"
-                 + "║ 🏷️ Name: {name}\n"
-                 + "║ 📝 Description: {description}\n"
-                 + "║ 📂 Category: {category}\n"
-                 + "║ 🔤 Aliases: {aliases}\n"
-                 + "║ 🏷️ Version: {version}\n"
-                 + "║ 🔒 Permissions: {role}\n"
-                 + "║ ⏱️ Cooldown: {countDown}s\n"
-                 + "║ 🔧 Use Prefix: {usePrefix}\n"
-                 + "║ 👤 Author: {author}\n"
-                 + "╠══════════◇◆◇══════════╣",
-      usageHeader: "║ 🛠️ USAGE GUIDE",
-      usageBody: " ║ {usage}",
-      usageFooter: "╚══════════◇◆◇══════════╝",
-      commandNotFound: "⚠️ Command '{command}' not found!",
-      doNotHave: "None",
-      roleText0: "👥 All Users",
-      roleText1: "👑 Group Admins",
-      roleText2: "⚡ Bot Admins",
-      totalCommands: "📊 Total Commands: {total}\n"
-                  + "Zaraki"
-    }
-  },
-
-  onStart: async function({ message, args, event, threadsData, role }) {
+  onStart: async function ({ message, args, event, threadsData, role }) {
     const { threadID } = event;
+    const threadData = await threadsData.get(threadID);
     const prefix = getPrefix(threadID);
-    const commandName = args[0]?.toLowerCase();
-    const bannerPath = path.join(__dirname, "assets", "https://i.imgur.com/sx6evUW.jpeg");
 
-    if (commandName === 'c' && args[1]) {
-      const categoryArg = args[1].toUpperCase();
-      const commandsInCategory = [];
-
-      for (const [name, cmd] of commands) {
-        if (cmd.config.role > 1 && role < cmd.config.role) continue;
-        const category = cmd.config.category?.toUpperCase() || "GENERAL";
-        if (category === categoryArg) {
-          commandsInCategory.push({ name });
+    const deleteMessageAfterOneMinute = async (msgID) => {
+      setTimeout(async () => {
+        try {
+          await message.unsend(msgID);
+        } catch (error) {
+          console.error("Error unsending message:", error);
         }
+      }, 60000); // 60 seconds
+    };
+
+    if (args.length === 0) {
+      const categories = {};
+      let msg = "";
+
+      msg += `》[🍓 𝘓𝘐𝘚𝘛-𝘊𝘔𝘋𝘚 ]\n╧╤╧╤╧╤╧╤╧╤╧╤╧╤╧╤\n\n`;
+
+      for (const [name, value] of commands) {
+        if (value.config.role > 1 && role < value.config.role) continue;
+
+        const category = value.config.category || "Uncategorized";
+        categories[category] = categories[category] || { commands: [] };
+        categories[category].commands.push(name);
       }
 
-      if (commandsInCategory.length === 0) {
-        return message.reply(`❌ No commands found in category: ${categoryArg}`);
-      }
+      Object.keys(categories).forEach((category) => {
+        if (category !== "info") {
+          msg += ` \n✪ ━「${category.toUpperCase()}」━`;
+          const names = categories[category].commands.sort();
+          for (let i = 0; i < names.length; i += 3) {
+            const cmds = names.slice(i, i + 3).map((item) => `\n🍓_${item}`);
+            msg += ` ${cmds.join(" ".repeat(Math.max(1, 10 - cmds.join("").length)))}`;
+          }
 
-      let replyMsg = this.langs.en.helpHeader;
-      replyMsg += this.langs.en.categoryHeader.replace(/{category}/g, categoryArg);
-
-      commandsInCategory.sort((a, b) => a.name.localeCompare(b.name)).forEach(cmd => {
-        replyMsg += this.langs.en.commandItem.replace(/{name}/g, cmd.name) + "\n";
+          msg += ``;
+        }
       });
 
-      replyMsg += this.langs.en.helpFooter;
-      replyMsg += "\n" + this.langs.en.totalCommands.replace(/{total}/g, commandsInCategory.length);
+      const totalCommands = commands.size;
+      msg += `\n\n╧╤╧╤╧╤╧╤╧╤╧╤╧╤╧╤\n➪[🍓] Total Commands [${totalCommands}]\n➪[🍓] OWNER: 𝘝𝘖𝘓𝘋𝘐𝘎𝘖 𝘈𝘕𝘖𝘚\n➪[https://www.facebook.com/voldigo.anos] NB: use called in any report`;
+      msg += `\n\n/// 🍓 𝑉𝑂𝐿𝐷𝐼𝐺𝑂 𝐵𝑂𝑇 ////`;
+      msg += ``;
 
-      return message.reply(replyMsg);
-    }
+      const response = await message.reply({ body: msg });
+      deleteMessageAfterOneMinute(response.messageID);
+    } else {
+      const commandName = args[0].toLowerCase();
+      const command = commands.get(commandName) || commands.get(aliases.get(commandName));
 
-    if (!commandName || commandName === 'all') {
-      const categories = new Map();
+      if (!command) {
+        await message.reply(`Command "${commandName}" not found.`);
+      } else {
+        const configCommand = command.config;
+        const roleText = roleTextToString(configCommand.role);
+        const author = configCommand.author || "Unknown";
 
-      for (const [name, cmd] of commands) {
-        if (cmd.config.role > 1 && role < cmd.config.role) continue;
+        const longDescription = configCommand.longDescription ? configCommand.longDescription.en || "No description" : "No description";
 
-        const category = cmd.config.category?.toUpperCase() || "GENERAL";
-        if (!categories.has(category)) {
-          categories.set(category, []);
-        }
-        categories.get(category).push({ name });
-      }
+        const guideBody = configCommand.guide?.en || "No guide available.";
+        const usage = guideBody.replace(/{p}/g, prefix).replace(/{n}/g, configCommand.name);
 
-      const sortedCategories = [...categories.keys()].sort();
-      let replyMsg = this.langs.en.helpHeader.replace(/{prefix}/g, prefix);
-      let totalCommands = 0;
+        const response = `🍓𝗡𝗔𝗠𝗘🍓\n══════◄••❀••►══════\n
+ 〉[ ${configCommand.name}]\n
+🍓𝗜𝗡𝗙𝗢🍓\n══════◄••❀••►══════\n
+   〉[description]:\n▶︎${longDescription}\n
+   〉🍓[Other-names]:\n▶︎${configCommand.aliases ? configCommand.aliases.join(", ") : "Do not have"} Other names in your group: Do not have\n
+   〉🍓[Version]:\n▶︎${configCommand.version || "1.0"}\n
+   〉🍓[Role]:\n▶︎${roleText}\n
+   〉Time per command:\n ▶︎${configCommand.countDown || 1}s\n
+   〉🍓[Author]:\n▶︎${author}\n
+🍓𝗨𝗦𝗔𝗚𝗘🍓\n══════◄••❀••►══════\n
+▶︎ ${usage}\n══════◄••❀••►══════\n🍓 𝐵𝑌 𝑉𝑂𝐿𝐷𝐼𝐺𝑂-𝐴𝑁𝑂𝑆 ⚪`;
 
-      for (const category of sortedCategories) {
-        const commandsInCategory = categories.get(category).sort((a, b) => a.name.localeCompare(b.name));
-        totalCommands += commandsInCategory.length;
-
-        replyMsg += this.langs.en.categoryHeader.replace(/{category}/g, category);
-
-        commandsInCategory.forEach(cmd => {
-          replyMsg += this.langs.en.commandItem.replace(/{name}/g, cmd.name) + "\n";
-        });
-
-        replyMsg += this.langs.en.helpFooter;
-      }
-
-      replyMsg += "\n" + this.langs.en.totalCommands.replace(/{total}/g, totalCommands);
-
-      try {
-        if (fs.existsSync(bannerPath)) {
-          return message.reply({
-            body: replyMsg,
-            attachment: fs.createReadStream(bannerPath)
-          });
-        } else {
-          return message.reply(replyMsg);
-        }
-      } catch (e) {
-        console.error("Couldn't load help banner:", e);
-        return message.reply(replyMsg);
+        const responseMessage = await message.reply(response);
+        deleteMessageAfterOneMinute(responseMessage.messageID);
       }
     }
-
-    let cmd = commands.get(commandName) || commands.get(aliases.get(commandName));
-    if (!cmd) {
-      return message.reply(this.langs.en.commandNotFound.replace(/{command}/g, commandName));
-    }
-
-    const config = cmd.config;
-    const description = config.description?.en || config.description || "No description";
-    const aliasesList = config.aliases?.join(", ") || this.langs.en.doNotHave;
-    const category = config.category?.toUpperCase() || "GENERAL";
-
-    let roleText;
-    switch(config.role) {
-      case 1: roleText = this.langs.en.roleText1; break;
-      case 2: roleText = this.langs.en.roleText2; break;
-      default: roleText = this.langs.en.roleText0;
-    }
-
-    let guide = config.guide?.en || config.usage || config.guide || "No usage guide available";
-    if (typeof guide === "object") guide = guide.body;
-    guide = guide.replace(/\{prefix\}/g, prefix).replace(/\{name\}/g, config.name).replace(/\{pn\}/g, prefix + config.name);
-
-    let replyMsg = this.langs.en.commandInfo
-      .replace(/{name}/g, config.name)
-      .replace(/{description}/g, description)
-      .replace(/{category}/g, category)
-      .replace(/{aliases}/g, aliasesList)
-      .replace(/{version}/g, config.version)
-      .replace(/{role}/g, roleText)
-      .replace(/{countDown}/g, config.countDown || 1)
-      .replace(/{usePrefix}/g, typeof config.usePrefix === "boolean" ? (config.usePrefix ? "✅ Yes" : "❌ No") : "❓ Unknown")
-      .replace(/{author}/g, config.author || "Unknown");
-
-    replyMsg += "\n" + this.langs.en.usageHeader + "\n" +
-                this.langs.en.usageBody.replace(/{usage}/g, guide.split("\n").join("\n ")) + "\n" +
-                this.langs.en.usageFooter;
-
-    return message.reply(replyMsg);
-  }
+  },
 };
+
+function roleTextToString(roleText) {
+  switch (roleText) {
+    case 0:
+      return "0 (All users)";
+    case 1:
+      return "1 (Group administrators)";
+    case 2:
+      return "2 (Admin bot)";
+    default:
+      return "Unknown role";
+  }
+}
