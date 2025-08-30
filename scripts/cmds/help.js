@@ -67,7 +67,7 @@ module.exports = {
       });
 
       const totalCommands = commands.size;
-      msg += `\n\n╧╤╧╤╧╤╧╤╧╤╧╤╧╤╧╤\n➪[🍓] Total Commands [${totalCommands}]\n➪[🍓] OWNER: 𝘝𝘖𝘓𝘋𝘐𝘎𝘖 𝘈𝘕𝘖𝘚\n➪[https://www.facebook.com/voldigo.anos] NB: use called in any report`;
+      msg += `\n\n╧╤╧╤╧╤╧╤╧╤╧╤╧╤╧╤\n➪[🍓] Total Commands [${totalCommands}]\n➪[🍓] OWNER: 𝘝𝘖𝘓𝘋𝘐𝘎𝘖 𝘈𝘕𝘖𝘚\n➪[https://www.facebook.com/voldigo.zaraki] NB: use called in any report`;
       msg += `\n\n/// 🍓 𝑉𝑂𝐿𝐷𝐼𝐺𝑂 𝐵𝑂𝑇 ////`;
       msg += ``;
 
