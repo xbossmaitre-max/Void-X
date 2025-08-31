@@ -2,8 +2,6 @@ const axios = require('axios');
 
 const BASE_URL = 'https://qizapi.onrender.com/api';
 
-const fonts = require('../../func/fonts.js');
-
 module.exports = {
   config: {
     name: "quiz",
