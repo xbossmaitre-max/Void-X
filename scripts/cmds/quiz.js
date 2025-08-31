@@ -496,4 +496,281 @@ module.exports = {
 
       const optText = options.map((opt, i) => `${String.fromCharCode(65 + i)}. ${opt}`).join("\n");
 
-      const info = await message.reply(getLang("
+      const info = await message.reply(getLang("reply")
+        .replace("{category}", qCategory?.charAt(0).toUpperCase() + qCategory?.slice(1) || "Random")
+        .replace("{difficulty}", difficulty?.charAt(0).toUpperCase() + difficulty?.slice(1) || "Medium")
+        .replace("{question}", question)
+        .replace("{options}", optText));
+
+      global.GoatBot.onReply.set(info.messageID, {
+        commandName,
+        author: event.senderID,
+        messageID: info.messageID,
+        answer,
+        questionId: _id,
+        startTime: Date.now(),
+        difficulty,
+        category: qCategory
+      });
+
+      setTimeout(() => {
+        const r = global.GoatBot.onReply.get(info.messageID);
+        if (r) {
+          message.reply(getLang("timeoutMessage").replace("{correctAnswer}", answer));
+          message.unsend(info.messageID);
+          global.GoatBot.onReply.delete(info.messageID);
+        }
+      }, 30000);
+    } catch (err) {
+      console.error("Quiz error:", err);
+      message.reply("⚠️ Could not get quiz question. Try 'quiz categories' to see available options.");
+    }
+  },
+
+  async handleCategoryLeaderboard(message, getLang, args, api) {
+    try {
+      const category = args[0]?.toLowerCase();
+      if (!category) {
+        return message.reply("📚 Please specify a category to view the leaderboard for.");
+      }
+
+      const page = parseInt(args[1]) || 1;
+      const res = await axios.get(`${BASE_URL}/leaderboard/category/${category}?page=${page}&limit=10`);
+      const { users, pagination } = res.data;
+
+      if (!users || users.length === 0) {
+        return message.reply(`🏆 No players found for the category: ${category}.`);
+      }
+
+      const topPlayersWithNames = await Promise.all(users.map(async (u, i) => {
+        let userName = 'Anonymous Player';
+        if (u.userId) {
+          userName = await this.getUserName(api, u.userId);
+        }
+
+        const position = (pagination.currentPage - 1) * 10 + i + 1;
+        const crown = position === 1 ? "👑" : position === 2 ? "🥈" : position === 3 ? "🥉" : "🏅";
+        const title = this.getUserTitle(u.correct || 0);
+        return `${crown} #${position} ${userName}\n🎖️ ${title}\n📊 ${u.correct || 0}/${u.total || 0} (${u.accuracy || 0}%)`;
+      }));
+
+      const topPlayers = topPlayersWithNames.join('\n\n');
+
+      return message.reply(
+        `🏆 𝗟𝗲𝗮𝗱𝗲𝗿𝗯𝗼𝗮𝗿𝗱: ${category.charAt(0).toUpperCase() + category.slice(1)}\n━━━━━━━━━\n\n${topPlayers}\n\n` +
+        `📖 Page ${pagination.currentPage}/${pagination.totalPages}\n` +
+        `👥 Total Players: ${pagination.totalUsers}`
+      );
+    } catch (err) {
+      console.error("Category leaderboard error:", err);
+      return message.reply("⚠️ Could not fetch category leaderboard.");
+    }
+  },
+
+
+
+  onReaction: async function ({ message, event, Reaction, api, usersData }) {
+    try {
+      const { author, messageID, answer, reacted, reward } = Reaction;
+
+      if (event.userID !== author || reacted) return;
+
+      const userAnswer = event.reaction === '😆' ? "A" : "B"; 
+      const isCorrect = userAnswer === answer;
+
+      const timeSpent = (Date.now() - Reaction.startTime) / 1000;
+      if (timeSpent > 30) {
+        return message.reply("⏰ Time's up!");
+      }
+
+      const userName = await this.getUserName(api, event.userID);
+
+      const answerData = {
+        userId: event.userID,
+        questionId: Reaction.questionId,
+        answer: userAnswer,
+        timeSpent,
+        userName
+      };
+
+      try {
+        const res = await axios.post(`${BASE_URL}/answer`, answerData);
+        const { user, xpGained } = res.data;
+
+        const userData = await usersData.get(event.userID) || {};
+        if (isCorrect) {
+          const baseMoneyReward = 10000;
+          const streakBonus = (user.currentStreak || 0) * 1000;
+          const totalMoneyReward = baseMoneyReward + streakBonus;
+
+          userData.money = (userData.money || 0) + totalMoneyReward;
+          await usersData.set(event.userID, userData);
+
+          const correctText = answer === "A" ? "True" : "False";
+
+          const torfSuccessMessages = [
+            "🎯 𝗔𝗕𝗦𝗢𝗟𝗨𝗧𝗘𝗟𝗬 𝗧𝗥𝗨𝗘! 𝗬𝗼𝘂’𝗿𝗲 𝗮 𝗴𝗲𝗻𝗶𝘂𝘀! ✨",
+            "⚡ 𝗣𝗘𝗥𝗙𝗘𝗖𝗧! 𝗧𝗿𝘂𝗲/𝗙𝗮𝗹𝘀𝗲 𝗺𝗮𝘀𝘁𝗲𝗿! 🏆",
+            "🔥 𝗙𝗔𝗡𝗧𝗔𝗦𝗧𝗜𝗖! 𝗬𝗼𝘂 𝗻𝗮𝗶𝗹𝗲𝗱 𝗶𝘁! 🎯",
+            "🌟 𝗕𝗥𝗔𝗩𝗢! 𝗦𝗶𝗺𝗽𝗹𝗲 𝗯𝘂𝘁 𝗲𝗳𝗳𝗲𝗰𝘁𝗶𝘃𝗲! ⭐",
+            "🎊 𝗘𝗫𝗖𝗘𝗟𝗟𝗘𝗡𝗧! 𝗤𝘂𝗶𝗰𝗸 𝗮𝗻𝗱 𝗰𝗼𝗿𝗿𝗲𝗰𝘁! 🚀"
+          ];
+
+          const randomTorfMsg = torfSuccessMessages[Math.floor(Math.random() * torfSuccessMessages.length)];
+
+          let streakMessage = "";
+          const streak = user.currentStreak || 0;
+          if (streak >= 5) streakMessage = "\n🔥 𝗔𝗺𝗮𝘇𝗶𝗻𝗴 𝘀𝘁𝗿𝗲𝗮𝗸! 𝗞𝗲𝗲𝗽 𝗶𝘁 𝗴𝗼𝗶𝗻𝗴! 🚀";
+
+          const successMsg = `${randomTorfMsg}\n` +
+            `━━━━━━━━━\n\n` +
+            `🎉 𝗖𝗼𝗻𝗴𝗿𝗮𝘁𝘂𝗹𝗮𝘁𝗶𝗼𝗻𝘀, ${userName}! 🎉\n\n` +
+            `💰 𝗠𝗼𝗻𝗲𝘆 𝗘𝗮𝗿𝗻𝗲𝗱: +${totalMoneyReward.toLocaleString()} 💎\n` +
+            `✨ 𝗫𝗣 𝗚𝗮𝗶𝗻𝗲𝗱: +${xpGained || 15} ⚡\n` +
+            `🔥 𝗦𝘁𝗿𝗲𝗮𝗸: ${user.currentStreak || 0} 🚀\n` +
+            `⏱️ 𝗧𝗶𝗺𝗲: ${timeSpent.toFixed(1)}s` + streakMessage +
+            `\n\n🎯 𝗧𝗿𝘂𝗲/𝗙𝗮𝗹𝘀𝗲 𝗺𝗮𝘀𝘁𝗲𝗿! 𝗞𝗲𝗲𝗽 𝗴𝗼𝗶𝗻𝗴! 🌟`;
+          message.reply(successMsg);
+        } else {
+          const correctText = answer === "A" ? "True" : "False";
+
+          const torfWrongMessages = [
+            "💔 𝗔𝘄𝘄! 𝗧𝗿𝘂𝗲/𝗙𝗮𝗹𝘀𝗲 𝗰𝗮𝗻 𝗯𝗲 𝘁𝗿𝗶𝗰𝗸𝘆! 🤔",
+            "🌱 𝗢𝗼𝗽𝘀! 𝗡𝗼 𝘄𝗼𝗿𝗿𝗶𝗲𝘀, 𝗸𝗲𝗲𝗽 𝗹𝗲𝗮𝗿𝗻𝗶𝗻𝗴! 📚",
+            "🔄 𝗡𝗼𝘁 𝗾𝘂𝗶𝘁𝗲! 𝗦𝗼𝗺𝗲𝘁𝗶𝗺𝗲𝘀 𝗶𝘁'𝘀 𝗮 𝗴𝘂𝗲𝘀𝘀! 🎲",
+            "⭐ 𝗪𝗿𝗼𝗻𝗴! 𝗣𝗿𝗮𝗰𝘁𝗶𝗰𝗲 𝗺𝗮𝗸𝗲𝘀 𝗽𝗲𝗿𝗳𝗲𝗰𝘁! 💪",
+            "💫 𝗠𝗶𝘀𝘀! 𝗘𝘃𝗲𝗻 𝗺𝗮𝘀𝘁𝗲𝗿𝘀 𝗺𝗶𝘀𝘀 𝘀𝗼𝗺𝗲𝘁𝗶𝗺𝗲𝘀! 🌟"
+          ];
+
+          const randomTorfWrongMsg = torfWrongMessages[Math.floor(Math.random() * torfWrongMessages.length)];
+
+          message.reply(`${randomTorfWrongMsg}\n` +
+            `━━━━━━━━━\n\n` +
+            `🎯 𝗖𝗼𝗿𝗿𝗲𝗰𝘁 𝗔𝗻𝘀𝘄𝗲𝗿: ${correctText} ✅\n` +
+            `👤 ${userName}\n` +
+            `💔 𝗦𝘁𝗿𝗲𝗮𝗸 𝗥𝗲𝘀𝗲𝘁\n\n` +
+            `🔥 𝗡𝗲𝘅𝘁 𝗾𝘂𝗲𝘀𝘁𝗶𝗼𝗻 𝗮𝘄𝗮𝗶𝘁𝘀! 𝗟𝗲𝘁'𝘀 𝗴𝗲𝘁 𝗶𝘁! 🚀`);
+        }
+      } catch (error) {
+        console.error("Error updating score:", error);
+      }
+
+      global.GoatBot.onReaction.get(messageID).reacted = true;
+      setTimeout(() => global.GoatBot.onReaction.delete(messageID), 1000);
+    } catch (err) {
+      console.error("Quiz reaction error:", err);
+    }
+  },
+
+  onReply: async function ({ message, event, Reply, getLang, api, usersData }) {
+    if (Reply.author !== event.senderID) return;
+
+    try {
+      const ans = event.body.trim().toUpperCase();
+      if (!["A", "B", "C", "D"].includes(ans)) {
+        return message.reply("❌ Please reply with A, B, C, or D only!");
+      }
+
+      const timeSpent = (Date.now() - Reply.startTime) / 1000;
+      if (timeSpent > 30) {
+        return message.reply("⏰ Time's up!");
+      }
+
+      const userName = await this.getUserName(api, event.senderID);
+
+      let correctAnswer = Reply.answer;
+      let userAnswer = ans;
+
+      if ((Reply.isFlag || Reply.isAnime) && Reply.options) {
+        const optionIndex = ans.charCodeAt(0) - 65;
+        if (optionIndex >= 0 && optionIndex < Reply.options.length) {
+          userAnswer = Reply.options[optionIndex];
+        }
+      }
+
+      const answerData = {
+        userId: event.senderID,
+        questionId: Reply.questionId,
+        answer: userAnswer,
+        timeSpent,
+        userName
+      };
+
+      const res = await axios.post(`${BASE_URL}/answer`, answerData);
+
+      if (!res.data) {
+        throw new Error('No response data received');
+      }
+
+      const { result, user } = res.data;
+
+      let responseMsg;
+
+      if (result === "correct") {
+        const userData = await usersData.get(event.senderID) || {};
+
+        let baseMoneyReward = 10000;
+        if (Reply.difficulty === 'hard') baseMoneyReward = 15000;
+        if (Reply.difficulty === 'easy') baseMoneyReward = 7500;
+        if (Reply.isFlag) baseMoneyReward = 12000;
+        if (Reply.isAnime) baseMoneyReward = 15000;
+        if (Reply.isDailyChallenge) baseMoneyReward = 20000;
+
+        const streakBonus = (user.currentStreak || 0) * 1000;
+        const totalMoneyReward = baseMoneyReward + streakBonus;
+
+        userData.money = (userData.money || 0) + totalMoneyReward;
+        await usersData.set(event.senderID, userData);
+
+        const difficultyBonus = Reply.difficulty === 'hard' ? ' 🔥' : Reply.difficulty === 'easy' ? ' ⭐' : '';
+        const streakBonus2 = (user.currentStreak || 0) >= 5 ? ` 🚀 ${user.currentStreak}x streak!` : '';
+        const flagBonus = Reply.isFlag ? ' 🏁' : '';
+        const animeBonus = Reply.isAnime ? ' 🎌' : '';
+        const dailyBonus = Reply.isDailyChallenge ? ' 🌟' : '';
+
+        responseMsg = `🎉 Correct! 💰\n` +
+          `💵 Money: +${totalMoneyReward.toLocaleString()}\n` +
+          `✨ XP: +${user.xpGained || 15}\n` +
+          `📊 Score: ${user.correct || 0}/${user.total || 0} (${user.accuracy || 0}%)\n` +
+          `🔥 Streak: ${user.currentStreak || 0}\n` +
+          `⚡ Response Time: ${timeSpent.toFixed(1)}s\n` +
+          `🎯 XP Progress: ${user.xp || 0}/1000\n` +
+          `👤 ${userName}` + difficultyBonus + streakBonus2 + flagBonus + animeBonus + dailyBonus;
+      } else {
+        responseMsg = `❌ Wrong! Correct answer: ${correctAnswer}\n` +
+          `📊 Score: ${user.correct || 0}/${user.total || 0} (${user.accuracy || 0}%)\n` +
+          `💔 Streak Reset\n` +
+          `👤 ${userName}` + (Reply.isFlag ? ' 🏁' : '') + (Reply.isAnime ? ' 🎌' : '');
+      }
+
+      await message.reply(responseMsg);
+
+      if (user.achievements && user.achievements.length > 0) {
+        const achievementMsg = user.achievements.map(ach => `🏆 ${ach}`).join('\n');
+        await message.reply(`🏆 Achievement Unlocked!\n${achievementMsg}\n💰 +50,000 bonus coins!\n✨ +100 bonus XP!`);
+
+        const userData = await usersData.get(event.senderID) || {};
+        userData.money = (userData.money || 0) + 50000;
+        await usersData.set(event.senderID, userData);
+      }
+
+      message.unsend(Reply.messageID);
+      global.GoatBot.onReply.delete(Reply.messageID);
+    } catch (err) {
+      console.error("Answer error:", err);
+      const errorMsg = err.response?.data?.error || err.message || "Unknown error occurred";
+      message.reply(`⚠️ Error processing your answer: ${errorMsg}`);
+    }
+  },
+
+  envConfig: {
+    reward: 10000,
+    achievementReward: 50000,
+    streakReward: 1000,
+    flagReward: 12000,
+    animeReward: 15000,
+    dailyChallengeBonus: 20000,
+    hardDifficultyReward: 15000,
+    easyDifficultyReward: 7500
+  }
+};
