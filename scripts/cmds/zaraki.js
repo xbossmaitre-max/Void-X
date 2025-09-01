@@ -15,7 +15,7 @@ module.exports = {
   },
 
   onStart: async function ({ message, args }) {
-    if (!args.length) return message.reply("🤖 𝗡𝗜𝗫 𝗔𝗜\n\n𝖧𝖾𝗅𝗅𝗈! 𝖧𝗈𝗐 𝖼𝖺𝗇 𝖨 𝖺𝗌𝗌𝗂𝗌𝗍 𝗒𝗈𝗎 𝗍𝗈𝖽𝖺𝗒?");
+    if (!args.length) return message.reply("🤖 𝐙𝐀𝐑𝐀𝐊𝐈 𝗔𝗜\n\n𝖧𝖾𝗅𝗅𝗈! 𝖧𝗈𝗐 𝖼𝖺𝗇 𝖨 𝖺𝗌𝗌𝗂𝗌𝗍 𝗒𝗈𝗎 𝗍𝗈𝖽𝖺𝗒?");
 
     const p = args.join(" ");
 
