@@ -2,80 +2,83 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 
+const defaultPrompts = [
+  "1girl, makima (chainsaw man), chainsaw man, black jacket, black necktie, black pants, braid, business suit, fingernails, formal, hand on own chin, jacket on shoulders, light smile, long sleeves, looking at viewer, looking up, medium breasts, office lady, smile, solo, suit, upper body, white shirt, outdoors",
+  "1girl, souryuu asuka langley, neon genesis evangelion, plugsuit, pilot suit, red bodysuit, sitting, crossing legs, black eye patch, cat hat, throne, symmetrical, looking down, from bottom, looking at viewer, outdoors",
+  "1boy, male focus, gojou satoru, jujutsu kaisen, black jacket, blindfold lift, blue eyes, glowing, glowing eyes, high collar, jacket, jujutsu tech uniform, solo, grin, white hair",
+  "1girl, cagliostro, granblue fantasy, violet eyes, standing, hand on own chin, looking at object, smile, closed mouth, table, beaker, glass tube, experiment apparatus, dark room, laboratory"
+];
+
 module.exports = {
- config: {
- name: 'xl',
- version: '1.0',
- author: "Chitron Bhattacharjee",
- countDown: 10,
- role: 0,
- longDescription: {
- en: 'Generate an image from text using SDXL.'
- },
- category: 'image',
- guide: {
- en: '{pn} prompt [--ar=<ratio>] or [--ar <ratio>]'
- }
- },
+  config: {
+    name: "xl",
+    version: "1.6",
+    author: "Aryan Chauhan",
+    countDown: 5,
+    role: 0,
+    shortDescription: "Generate anime images.",
+    category: "ai",
+    guide: {
+      en: "{pn} <prompt>\nExample: {pn} cat"
+    }
+  },
 
- onStart: async function ({ message, api, args, event, usersData }) {
- const cost = 50;
+  onStart: async function ({ api, event, args }) {
+    let prompt = args.length
+      ? args.join(" ")
+      : defaultPrompts[Math.floor(Math.random() * defaultPrompts.length)];
 
- if (!args[0]) {
- return message.reply(`😡 Please enter a text prompt\nExample: \n+xl a cat\n+xl a girl --ar 2:3`);
- }
+    const filePath = path.join(__dirname, "xl.png");
 
- // Check and deduct coins
- const userData = await usersData.get(event.senderID);
- const balance = userData.money || 0;
+    try {
+      api.setMessageReaction("⏳", event.messageID, () => {}, true);
 
- if (balance < cost) {
- return message.reply(`❌ | You need at least ${cost} coins.\n💰 Your balance: ${balance}`);
- }
+      const generatingMsgID = (await new Promise(resolve =>
+        api.sendMessage("⏳ Generating your image, please wait...", event.threadID, (err, info) => {
+          resolve(err ? null : info.messageID);
+        }, event.messageID)
+      ));
 
- await usersData.set(event.senderID, { money: balance - cost });
+      const { data } = await axios.get(
+        `https://aryanapi.vercel.app/api/xl?prompt=${encodeURIComponent(prompt)}`
+      );
 
- message.reply("💸 𝓣𝓱𝓲𝓼 𝓬𝓸𝓼𝓽 ❺⓿ 𝓬𝓸𝓲𝓷𝓼\n⏳ 𝓖𝓮𝓷𝓮𝓻𝓪𝓽𝓲𝓷𝓰 𝓲𝓶𝓪𝓰𝓮...");
+      if (!data?.status || !data?.url) {
+        api.setMessageReaction("❌", event.messageID, () => {}, true);
+        if (generatingMsgID) api.unsendMessage(generatingMsgID);
+        return api.sendMessage("❌ Failed to generate image.", event.threadID, event.messageID);
+      }
 
- let ratio = "1:1";
- const ratioIndex = args.findIndex(arg => arg.startsWith("--ar="));
- if (ratioIndex !== -1) {
- ratio = args[ratioIndex].split("=")[1];
- args.splice(ratioIndex, 1);
- } else {
- const flagIndex = args.findIndex(arg => arg === "--ar");
- if (flagIndex !== -1 && args[flagIndex + 1]) {
- ratio = args[flagIndex + 1];
- args.splice(flagIndex, 2);
- }
- }
+      const imageResponse = await axios.get(data.url, { responseType: "stream" });
+      const writer = fs.createWriteStream(filePath);
 
- const prompt = args.join(" ");
- const query = `xl31?prompt=${encodeURIComponent(prompt)}&ratio=${ratio}`;
- const imageURL = `https://smfahim.xyz/${query}`;
- const startTime = Date.now();
+      imageResponse.data.pipe(writer);
 
- try {
- const res = await axios.get(imageURL, { responseType: "arraybuffer" });
+      writer.on("error", () => {
+        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+        api.setMessageReaction("❌", event.messageID, () => {}, true);
+        if (generatingMsgID) api.unsendMessage(generatingMsgID);
+        api.sendMessage("❌ Failed to save image file.", event.threadID, event.messageID);
+      });
 
- const folder = path.join(__dirname, "cache");
- if (!fs.existsSync(folder)) fs.mkdirSync(folder);
+      writer.on("finish", () => {
+        api.sendMessage(
+          { attachment: fs.createReadStream(filePath) },
+          event.threadID,
+          () => {
+            if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+            api.setMessageReaction("✅", event.messageID, () => {}, true);
+            if (generatingMsgID) api.unsendMessage(generatingMsgID);
+          },
+          event.messageID
+        );
+      });
 
- const filePath = path.join(folder, `${Date.now()}_xl.png`);
- fs.writeFileSync(filePath, res.data);
-
- const timeTaken = ((Date.now() - startTime) / 1000).toFixed(2);
-
- await message.reply({
- body: `🖼️ 𝓧𝓛 𝓜𝓸𝓭𝓮𝓵 𝓘𝓶𝓪𝓰𝓮\n⏱️ Time taken: ${timeTaken} sec`,
- attachment: fs.createReadStream(filePath)
- });
-
- api.setMessageReaction("✅", event.messageID, () => {}, true);
- } catch (err) {
- console.error("XL gen error:", err);
- api.setMessageReaction("❌", event.messageID, () => {}, true);
- message.reply("❌ | Failed to generate image.");
- }
- }
+    } catch (err) {
+      console.error(err);
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      api.setMessageReaction("❌", event.messageID, () => {}, true);
+      api.sendMessage("❌ Error: Unable to generate image. Please try again later.", event.threadID, event.messageID);
+    }
+  }
 };
