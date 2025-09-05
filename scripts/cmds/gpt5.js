@@ -2,93 +2,75 @@ const axios = require("axios");
 
 module.exports = {
   config: {
-    name: "gpt5",
-    aliases: ["gpt"],
-    version: "1.0",
+    name: "ai",
+    aliases: ["gpt", "chatgpt", "gpt5"],
+    version: "1.2",
     author: "Aryan Chauhan",
     countDown: 5,
     role: 0,
-    shortDescription: { en: "Chat with GPT-5" },
-    longDescription: { en: "Talk with GPT-5 AI without conversation memory." },
+    shortDescription: { en: "Chat with AI" },
+    longDescription: { en: "Talk with GPT5 Model" },
     category: "ai",
-    guide: { en: "Use: !gpt5 <message>\nExample: !gpt5 hello" }
+    guide: { en: "Use: {p}ai <message>\nExample: {p}ai hello" }
   },
 
   onStart: async function ({ api, event, args }) {
     const prompt = args.join(" ");
-    if (!prompt) {
-      return api.sendMessage(
-        "⚠️ Please provide a message to start chatting.\nExample: !gpt5 hello",
-        event.threadID,
-        event.messageID
-      );
-    }
+    if (!prompt) return b(api, event, "⚠️ Please provide a message to start chatting.\nExample: !ai hello");
 
-    api.setMessageReaction("⏳", event.messageID, () => {}, true);
-
-    try {
-      const response = await axios.get("https://arychauhann.onrender.com/api/gpt5", {
-        params: { prompt }
-      });
-
-      if (!response.data || !response.data.result) {
-        api.setMessageReaction("❌", event.messageID, () => {}, true);
-        return api.sendMessage("❌ GPT-5 did not return a response.", event.threadID, event.messageID);
-      }
-
-      const answer = response.data.result.trim();
-
-      api.sendMessage(`${answer}`, event.threadID, (err, info) => {
-        if (err) return;
-        api.setMessageReaction("✅", event.messageID, () => {}, true);
-
-        global.GoatBot.onReply.set(info.messageID, {
-          commandName: this.config.name,
-          author: event.senderID
-        });
-      }, event.messageID);
-
-    } catch (err) {
-      console.error(err);
-      api.setMessageReaction("❌", event.messageID, () => {}, true);
-      api.sendMessage("❌ An error occurred while contacting GPT-5 AI.", event.threadID, event.messageID);
-    }
+    await a(api, event, prompt);
   },
 
   onReply: async function ({ api, event, Reply }) {
     if (event.senderID !== Reply.author) return;
-
     const prompt = event.body;
     if (!prompt) return;
 
-    api.setMessageReaction("⏳", event.messageID, () => {}, true);
+    await a(api, event, prompt);
+  },
 
-    try {
-      const response = await axios.get("https://arychauhann.onrender.com/api/gpt5", {
-        params: { prompt }
-      });
+  onChat: async function ({ api, event }) {
+    const text = event.body || "";
+    const match = text.match(/^(ai|gpt|chatgpt|gpt5)\s+(.+)/i);
+    if (!match) return;
 
-      if (!response.data || !response.data.result) {
-        api.setMessageReaction("❌", event.messageID, () => {}, true);
-        return api.sendMessage("❌ GPT-5 did not return a response.", event.threadID, event.messageID);
-      }
+    const prompt = match[2].trim();
+    if (!prompt) return;
 
-      const answer = response.data.result.trim();
-
-      api.sendMessage(`${answer}`, event.threadID, (err, info) => {
-        if (err) return;
-        api.setMessageReaction("✅", event.messageID, () => {}, true);
-
-        global.GoatBot.onReply.set(info.messageID, {
-          commandName: this.config.name,
-          author: event.senderID
-        });
-      }, event.messageID);
-
-    } catch (err) {
-      console.error(err);
-      api.setMessageReaction("❌", event.messageID, () => {}, true);
-      api.sendMessage("❌ An error occurred while chatting with GPT-5 AI.", event.threadID, event.messageID);
-    }
+    await a(api, event, prompt);
   }
 };
+
+async function a(api, event, prompt) {
+  api.setMessageReaction("⏳", event.messageID, () => {}, true);
+
+  try {
+    const response = await axios.get("https://arychauhann.onrender.com/api/gpt5", { params: { prompt } });
+
+    if (!response.data || !response.data.result) {
+      api.setMessageReaction("❌", event.messageID, () => {}, true);
+      return b(api, event, "❌ AI did not return a response.");
+    }
+
+    const answer = response.data.result.trim();
+
+    api.sendMessage(`${answer}`, event.threadID, (err, info) => {
+      if (err) return;
+      api.setMessageReaction("✅", event.messageID, () => {}, true);
+
+      global.GoatBot.onReply.set(info.messageID, {
+        commandName: "ai",
+        author: event.senderID
+      });
+    }, event.messageID);
+
+  } catch (err) {
+    console.error(err);
+    api.setMessageReaction("❌", event.messageID, () => {}, true);
+    b(api, event, "❌ An error occurred while chatting with AI.");
+  }
+}
+
+function b(api, event, text) {
+  return api.sendMessage(text, event.threadID, event.messageID);
+}
