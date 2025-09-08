@@ -1,11 +1,11 @@
-const fs = require("fs-extra");
+/cmd install prefix.js const fs = require("fs-extra");
 const { utils } = global;
 
 module.exports = {
   config: {
     name: "prefix",
     version: "1.5",
-    author: "Ew'r Saim",
+    author: "void Zaraki",
     countDown: 5,
     role: 0,
     description: "Change the bot prefix in this chat or globally (admin only)",
@@ -91,10 +91,10 @@ module.exports = {
       const userName = await usersData.getName(event.senderID);
 
       return message.reply(
-        `👋 𝐇𝐞𝐲 ${userName}, 𝐝𝐢𝐝 𝐲𝐨𝐮 𝐚𝐬𝐤 𝐟𝐨𝐫 𝐦𝐲 𝐩𝐫𝐞𝐟𝐢𝐱?\n` +
-        `➥ 🌐 𝐆𝐥𝐨𝐛𝐚𝐥: ${globalPrefix}\n` +
-        `➥ 💬 𝐓𝐡𝐢𝐬 𝐂𝐡𝐚𝐭: ${threadPrefix}\n` +
-        `𝐈'𝐦 , 𝐕𝐎𝐋𝐃𝐈𝐆𝐎_𝐙𝐀𝐑𝐀𝐊𝐈 𝐧𝐢𝐜𝐞 𝐭𝐨 𝐦𝐞𝐞𝐭 𝐲𝐨𝐮! `
+        `👋 𝗬𝗼 ${userName}, 𝘁𝘂 𝗮𝘀 𝗱𝗲𝗺𝗮𝗻𝗱𝗲 𝗺𝗼𝗻 𝗽𝗿𝗲́𝗳𝗶𝘅𝗲!?\n` +
+        `➥ 🌐 𝗣𝗥𝗘𝗙𝗜𝗫: ${globalPrefix}\n` +
+        `➥ 💬 𝗰𝗲 𝗴𝗿𝗼𝘂𝗽𝗲: ${threadPrefix}\n` +
+        `𝗷𝗲 𝘀𝘂𝗶𝘀 , 𝐕𝐎𝐋𝐃𝐈𝐆𝐎_𝐙𝐀𝐑𝐀𝐊𝐈 𝗰𝗼𝗺𝗺𝗲𝗻𝘁 𝘁𝘂 𝘃𝗮𝘀?! `
       );
     }
   }
